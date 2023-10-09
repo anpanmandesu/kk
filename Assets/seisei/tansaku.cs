@@ -11,10 +11,12 @@ public class tansaku : MonoBehaviour
     {
 
             if(instance == null)
+
         {
             instance = this;
         }
         
+
 
        // NavMeshSurface navMeshSurface = this.GetComponent<NavMeshSurface>();
         //navMeshSurface.buildNavMesh();
