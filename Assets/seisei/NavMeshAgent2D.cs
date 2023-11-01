@@ -7,6 +7,8 @@ public class NavMeshAgent2D : MonoBehaviour
     public float speed = 1.0f;
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
+    
+
 
     [HideInInspector]//常にUnityエディタから非表示
     private Vector2 trace_area = Vector2.zero;
@@ -24,6 +26,7 @@ public class NavMeshAgent2D : MonoBehaviour
         destination = target;
         return true;
     }
+    
 
     private void Trace(Vector2 current, Vector2 target)
     {
@@ -42,7 +45,16 @@ public class NavMeshAgent2D : MonoBehaviour
         {
             corner = path.corners[1];
         }
+        for (int i = 0; i < path.corners.Length; i++)
+        {
 
+
+            //Debug.Log(path.corners[i]);
+
+            if (i == path.corners.Length - 1) continue;
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+            
+        }
         transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);
     }
     ///<summary>ぶつかったら消える</summary>

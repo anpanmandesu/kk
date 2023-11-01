@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    NavMeshAgent2D agent; //NavMeshAgent2D‚ğg—p‚·‚é‚½‚ß‚Ì•Ï”
-    [SerializeField] Transform target; //’ÇÕ‚·‚éƒ^[ƒQƒbƒg
+    NavMeshAgent2D agent; //NavMeshAgent2Dã‚’ä½¿ç”¨ã™ã‚‹ãŸã‚ã®å¤‰æ•°
+    [SerializeField] Transform target; //è¿½è·¡ã™ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent2D>(); //agent‚ÉNavMeshAgent2D‚ğæ“¾
+        agent = GetComponent<NavMeshAgent2D>(); //agentã«NavMeshAgent2Dã‚’å–å¾—
     }
 
     void Update()
     {
-        agent.destination = target.position; //agent‚Ì–Ú“I’n‚ğtarget‚ÌÀ•W‚É‚·‚é
-        //agent.SetDestination(target.position); //‚±‚Á‚¿‚Ì‘‚«•û‚Å‚àƒIƒbƒP[
+        agent.destination = target.position; //agentã®ç›®çš„åœ°ã‚’targetã®åº§æ¨™ã«ã™ã‚‹
+        //agent.SetDestination(target.position); //ã“ã£ã¡ã®æ›¸ãæ–¹ã§ã‚‚ã‚ªãƒƒã‚±ãƒ¼
     }
 }
