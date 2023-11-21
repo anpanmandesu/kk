@@ -10,7 +10,7 @@ public class NavMeshAgent2D : MonoBehaviour
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
     public bool force = true;
-    int j = 0; //cornerたどるたび増える
+    int j = 0; //cornerたどるたび増える　
     int k = 0;//poligonとぶつかったら
     //壁からの斥力
     public string wallTag = "obstacle";
