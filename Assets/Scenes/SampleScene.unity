@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 160079214}
   - component: {fileID: 160079218}
   - component: {fileID: 160079222}
+  - component: {fileID: 160079223}
   m_Layer: 6
   m_Name: Circle(Clone) (66)
   m_TagString: Agent
@@ -399,7 +400,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -459,6 +460,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &160079223
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160079212}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5000019
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &162917634
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -658,6 +681,7 @@ GameObject:
   - component: {fileID: 275207614}
   - component: {fileID: 275207618}
   - component: {fileID: 275207622}
+  - component: {fileID: 275207623}
   m_Layer: 6
   m_Name: Circle(Clone) (3)
   m_TagString: Agent
@@ -786,7 +810,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -846,6 +870,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &275207623
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275207612}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &275748387
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,6 +906,7 @@ GameObject:
   - component: {fileID: 275748389}
   - component: {fileID: 275748393}
   - component: {fileID: 275748397}
+  - component: {fileID: 275748398}
   m_Layer: 6
   m_Name: Circle(Clone) (2)
   m_TagString: Agent
@@ -988,7 +1035,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -1048,6 +1095,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &275748398
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275748387}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &294966932
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1515,6 +1584,7 @@ GameObject:
   - component: {fileID: 389029854}
   - component: {fileID: 389029858}
   - component: {fileID: 389029862}
+  - component: {fileID: 389029863}
   m_Layer: 6
   m_Name: Circle(Clone) (17)
   m_TagString: Agent
@@ -1643,7 +1713,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -1703,6 +1773,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &389029863
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389029852}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &390152942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1856,6 +1948,7 @@ GameObject:
   - component: {fileID: 408973664}
   - component: {fileID: 408973668}
   - component: {fileID: 408973672}
+  - component: {fileID: 408973673}
   m_Layer: 6
   m_Name: Circle(Clone) (48)
   m_TagString: Agent
@@ -1984,7 +2077,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -2044,6 +2137,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &408973673
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408973662}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &416880328
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,6 +2173,7 @@ GameObject:
   - component: {fileID: 416880330}
   - component: {fileID: 416880334}
   - component: {fileID: 416880338}
+  - component: {fileID: 416880339}
   m_Layer: 6
   m_Name: Circle(Clone) (26)
   m_TagString: Agent
@@ -2186,7 +2302,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -2246,6 +2362,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &416880339
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416880328}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &434143919
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2326,6 +2464,7 @@ GameObject:
   - component: {fileID: 519049826}
   - component: {fileID: 519049830}
   - component: {fileID: 519049834}
+  - component: {fileID: 519049835}
   m_Layer: 6
   m_Name: Circle(Clone) (60)
   m_TagString: Agent
@@ -2454,7 +2593,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -2514,6 +2653,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &519049835
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519049824}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5000019
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &541323711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2660,6 +2821,7 @@ GameObject:
   - component: {fileID: 671028908}
   - component: {fileID: 671028912}
   - component: {fileID: 671028916}
+  - component: {fileID: 671028917}
   m_Layer: 6
   m_Name: Circle(Clone) (58)
   m_TagString: Agent
@@ -2788,7 +2950,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -2848,6 +3010,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &671028917
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671028906}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &692378351
 GameObject:
   m_ObjectHideFlags: 0
@@ -2862,6 +3046,7 @@ GameObject:
   - component: {fileID: 692378353}
   - component: {fileID: 692378357}
   - component: {fileID: 692378361}
+  - component: {fileID: 692378362}
   m_Layer: 6
   m_Name: Circle(Clone) (54)
   m_TagString: Agent
@@ -2990,7 +3175,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -3050,6 +3235,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &692378362
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692378351}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5000019
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &696258059
 GameObject:
   m_ObjectHideFlags: 0
@@ -3064,6 +3271,7 @@ GameObject:
   - component: {fileID: 696258061}
   - component: {fileID: 696258065}
   - component: {fileID: 696258069}
+  - component: {fileID: 696258070}
   m_Layer: 6
   m_Name: Circle(Clone) (4)
   m_TagString: Agent
@@ -3192,7 +3400,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -3252,6 +3460,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &696258070
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696258059}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.4999995
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &784625405
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,6 +3496,7 @@ GameObject:
   - component: {fileID: 784625407}
   - component: {fileID: 784625411}
   - component: {fileID: 784625415}
+  - component: {fileID: 784625416}
   m_Layer: 6
   m_Name: Circle(Clone) (31)
   m_TagString: Agent
@@ -3394,7 +3625,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -3454,6 +3685,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &784625416
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784625405}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5000005
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &796276227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3550,6 +3803,7 @@ GameObject:
   - component: {fileID: 818285004}
   - component: {fileID: 818285008}
   - component: {fileID: 818285012}
+  - component: {fileID: 818285013}
   m_Layer: 6
   m_Name: Circle(Clone) (6)
   m_TagString: Agent
@@ -3678,7 +3932,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -3738,6 +3992,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &818285013
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818285002}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &846330946
 GameObject:
   m_ObjectHideFlags: 0
@@ -3752,6 +4028,7 @@ GameObject:
   - component: {fileID: 846330948}
   - component: {fileID: 846330952}
   - component: {fileID: 846330956}
+  - component: {fileID: 846330957}
   m_Layer: 6
   m_Name: Circle(Clone) (8)
   m_TagString: Agent
@@ -3880,7 +4157,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -3940,6 +4217,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &846330957
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846330946}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &849640366
 GameObject:
   m_ObjectHideFlags: 0
@@ -3954,6 +4253,7 @@ GameObject:
   - component: {fileID: 849640368}
   - component: {fileID: 849640372}
   - component: {fileID: 849640376}
+  - component: {fileID: 849640377}
   m_Layer: 6
   m_Name: Circle(Clone) (19)
   m_TagString: Agent
@@ -4082,7 +4382,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -4142,6 +4442,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &849640377
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849640366}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &893246336 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4092750082134098646, guid: 6527889954bf0417bbed76aa260b0c81, type: 3}
@@ -4384,6 +4706,7 @@ GameObject:
   - component: {fileID: 1021576874}
   - component: {fileID: 1021576878}
   - component: {fileID: 1021576882}
+  - component: {fileID: 1021576883}
   m_Layer: 6
   m_Name: Circle(Clone) (61)
   m_TagString: Agent
@@ -4512,7 +4835,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -4572,6 +4895,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1021576883
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021576872}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1023911498
 GameObject:
   m_ObjectHideFlags: 0
@@ -4670,6 +5015,7 @@ GameObject:
   - component: {fileID: 1055096487}
   - component: {fileID: 1055096491}
   - component: {fileID: 1055096495}
+  - component: {fileID: 1055096496}
   m_Layer: 6
   m_Name: Circle(Clone) (46)
   m_TagString: Agent
@@ -4798,7 +5144,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -4858,6 +5204,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1055096496
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055096485}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!4 &1089090394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 984250061937722117, guid: 1189ce837afaba44b8658d880bb866b4, type: 3}
@@ -4877,6 +5245,7 @@ GameObject:
   - component: {fileID: 1094468900}
   - component: {fileID: 1094468904}
   - component: {fileID: 1094468908}
+  - component: {fileID: 1094468909}
   m_Layer: 6
   m_Name: Circle(Clone) (42)
   m_TagString: Agent
@@ -5005,7 +5374,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -5065,6 +5434,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1094468909
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094468898}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1099606780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5145,6 +5536,7 @@ GameObject:
   - component: {fileID: 1113167349}
   - component: {fileID: 1113167348}
   - component: {fileID: 1113167347}
+  - component: {fileID: 1113167352}
   m_Layer: 6
   m_Name: Circle(Clone) (9)
   m_TagString: Agent
@@ -5169,7 +5561,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -5288,6 +5680,28 @@ Transform:
   m_Father: {fileID: 1768026659}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &1113167352
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113167345}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5000019
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1196209136
 GameObject:
   m_ObjectHideFlags: 0
@@ -5302,6 +5716,7 @@ GameObject:
   - component: {fileID: 1196209138}
   - component: {fileID: 1196209142}
   - component: {fileID: 1196209146}
+  - component: {fileID: 1196209147}
   m_Layer: 6
   m_Name: Circle(Clone) (28)
   m_TagString: Agent
@@ -5430,7 +5845,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -5490,6 +5905,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1196209147
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196209136}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!4 &1203627461 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1382336276743748728, guid: 0761a671b360e0e40b41bd616d367d92, type: 3}
@@ -5571,6 +6008,7 @@ GameObject:
   - component: {fileID: 1236799098}
   - component: {fileID: 1236799102}
   - component: {fileID: 1236799106}
+  - component: {fileID: 1236799107}
   m_Layer: 6
   m_Name: Circle(Clone) (15)
   m_TagString: Agent
@@ -5699,7 +6137,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -5759,6 +6197,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1236799107
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236799096}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.4999995
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1262371304
 GameObject:
   m_ObjectHideFlags: 0
@@ -5773,6 +6233,7 @@ GameObject:
   - component: {fileID: 1262371306}
   - component: {fileID: 1262371310}
   - component: {fileID: 1262371314}
+  - component: {fileID: 1262371315}
   m_Layer: 6
   m_Name: Circle(Clone) (70)
   m_TagString: Agent
@@ -5901,7 +6362,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -5961,6 +6422,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1262371315
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262371304}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1291165349
 GameObject:
   m_ObjectHideFlags: 0
@@ -6268,6 +6751,7 @@ GameObject:
   - component: {fileID: 1464578374}
   - component: {fileID: 1464578378}
   - component: {fileID: 1464578382}
+  - component: {fileID: 1464578383}
   m_Layer: 6
   m_Name: Circle(Clone) (35)
   m_TagString: Agent
@@ -6396,7 +6880,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -6456,6 +6940,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1464578383
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464578372}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1490053063
 GameObject:
   m_ObjectHideFlags: 0
@@ -6470,6 +6976,7 @@ GameObject:
   - component: {fileID: 1490053065}
   - component: {fileID: 1490053069}
   - component: {fileID: 1490053073}
+  - component: {fileID: 1490053074}
   m_Layer: 6
   m_Name: Circle(Clone) (16)
   m_TagString: Agent
@@ -6598,7 +7105,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -6658,6 +7165,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1490053074
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490053063}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.4999995
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1502466267
 GameObject:
   m_ObjectHideFlags: 0
@@ -7373,6 +7902,7 @@ GameObject:
   - component: {fileID: 1704301913}
   - component: {fileID: 1704301917}
   - component: {fileID: 1704301921}
+  - component: {fileID: 1704301922}
   m_Layer: 6
   m_Name: Circle(Clone) (36)
   m_TagString: Agent
@@ -7501,7 +8031,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -7561,6 +8091,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1704301922
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704301911}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1742801025
 GameObject:
   m_ObjectHideFlags: 0
@@ -7575,6 +8127,7 @@ GameObject:
   - component: {fileID: 1742801027}
   - component: {fileID: 1742801031}
   - component: {fileID: 1742801035}
+  - component: {fileID: 1742801036}
   m_Layer: 6
   m_Name: Circle(Clone) (41)
   m_TagString: Agent
@@ -7703,7 +8256,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -7763,6 +8316,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1742801036
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742801025}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999902
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1768026657
 GameObject:
   m_ObjectHideFlags: 0
@@ -8028,6 +8603,7 @@ GameObject:
   - component: {fileID: 1845048686}
   - component: {fileID: 1845048690}
   - component: {fileID: 1845048694}
+  - component: {fileID: 1845048695}
   m_Layer: 6
   m_Name: Circle(Clone) (33)
   m_TagString: Agent
@@ -8156,7 +8732,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -8216,6 +8792,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &1845048695
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845048684}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999902
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1869227265
 GameObject:
   m_ObjectHideFlags: 0
@@ -8565,7 +9163,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.016666668
+  m_VoxelSize: 0.1
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: b75de697748f04b2ead5818deb946231, type: 2}
 --- !u!114 &1937281763
@@ -8594,6 +9192,7 @@ GameObject:
   - component: {fileID: 2000666879}
   - component: {fileID: 2000666883}
   - component: {fileID: 2000666887}
+  - component: {fileID: 2000666888}
   m_Layer: 6
   m_Name: Circle(Clone) (1)
   m_TagString: Agent
@@ -8609,7 +9208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000666877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -301.99, y: 3.4, z: 0}
+  m_LocalPosition: {x: -301.99, y: 2.2, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8722,7 +9321,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -8782,6 +9381,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &2000666888
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000666877}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &2030659219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8924,6 +9545,7 @@ GameObject:
   - component: {fileID: 2102987938}
   - component: {fileID: 2102987942}
   - component: {fileID: 2102987946}
+  - component: {fileID: 2102987947}
   m_Layer: 6
   m_Name: Circle(Clone) (13)
   m_TagString: Agent
@@ -9052,7 +9674,7 @@ MonoBehaviour:
   isTouched: 0
   force: 1
   wallTag: obstacle
-  repulsionForce: 1
+  repulsionForce: 10
   raycastDistance: 1
   siya: {fileID: 0}
   target: {fileID: 1089090394}
@@ -9112,6 +9734,28 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
+--- !u!195 &2102987947
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102987936}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.49999997
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &2144490627
 PrefabInstance:
   m_ObjectHideFlags: 0

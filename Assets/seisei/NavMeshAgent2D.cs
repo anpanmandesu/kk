@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class NavMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
-    public float speed = 1.0f;
+    public float speed;
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
@@ -53,12 +53,16 @@ public class NavMeshAgent2D : MonoBehaviour
     bool ObstacleHit = true;
     //エージェントの半径（ランダム地点に障害物があるか判別するため)
     private float castRadius = 0.3f;//スケールの1/2
+    private NavMeshAgent navMeshAgent;
 
+    //ランダム地点
     void Start()
     {
+        speed = Random.Range(0.5f, 3f);
+        Debug.Log(speed);
 
-
-
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
 
 
         //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
@@ -104,26 +108,9 @@ public class NavMeshAgent2D : MonoBehaviour
     }
     void Update()
     {
-        //進行方向
-        Vector2 velocity = (Vector2)(transform.position - lastPos);
-        lastPos = transform.position;
-
-        Vector2 playerPosition = (Vector2)transform.position;
-        // プレイヤーから前方にRaycastを飛ばす（2DではPhysics2D.Raycastを使用）
-        RaycastHit2D hit = Physics2D.Raycast(playerPosition, transform.right, raycastDistance);
-
-        // Raycastが何かにヒットした場合、ヒットした物体が指定したタグを持っているか確認
-        if (hit.collider != null && hit.collider.CompareTag(wallTag))
-        {
-            // Raycastが指定したタグを持つオブジェクトにヒットした場合、斥力を計算し力を加える
-            float distanceToWall = hit.distance;
-            Vector2 repulsionDirection = -hit.normal; // 壁から遠ざかる方向
-
-            // 斥力を計算し、プレイヤーに力を加える
-            Vector2 repulsionForceVector = repulsionDirection * repulsionForce;
-            GetComponent<Rigidbody2D>().AddForce(repulsionForceVector);
-        }
-
+        // 回転をゼロに設定
+        transform.rotation = Quaternion.identity;
+        
 
         AgentForce = Vector2.zero;//リセット
         /*//エージェント同士の衝突回避
@@ -187,15 +174,15 @@ public class NavMeshAgent2D : MonoBehaviour
 
 
             //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
-            if (velocity != Vector2.zero)
-        {
-            Debug.Log("C");
-            // 速度ベクトルから角度を計算（度数法）
-            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        //     if (velocity != Vector2.zero)
+        // {
+        //     Debug.Log("C");
+        //     // 速度ベクトルから角度を計算（度数法）
+        //     float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
 
-            // オブジェクトを回転
-            /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
-        }
+        //     // オブジェクトを回転
+        //     /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
+        // }
 
 
         // 目的地に到達したら新しいランダムな目的地を設定
@@ -225,7 +212,7 @@ public class NavMeshAgent2D : MonoBehaviour
             }
         }
         Trace(transform.position, AgentDestination);
-
+    
     }
 
     void FixedUpdate()
@@ -244,25 +231,27 @@ public class NavMeshAgent2D : MonoBehaviour
     //navmesh
     private void Trace(Vector2 current, Vector2 target)
     {
-
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
-
-        Vector2 corner = path.corners[0];
-        if (Vector2.Distance(current, corner) <= 0.3f)
-        {
-            corner = path.corners[1];
-        }
-        for (int i = 0; i < path.corners.Length; i++)
-        {
+        navMeshAgent.SetDestination(target);
 
 
-            //Debug.Log(path.corners[i]);
+        // NavMeshPath path = new NavMeshPath();
+        // NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
 
-            if (i == path.corners.Length - 1) continue;
-            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+        // Vector2 corner = path.corners[0];
+        // if (Vector2.Distance(current, corner) <= 0.3f)
+        // {
+        //     corner = path.corners[1];
+        // }
+        // for (int i = 0; i < path.corners.Length; i++)
+        // {
 
-        }
+
+        //     //Debug.Log(path.corners[i]);
+
+        //     if (i == path.corners.Length - 1) continue;
+        //     Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+
+        // }
         
 
 
@@ -270,7 +259,9 @@ public class NavMeshAgent2D : MonoBehaviour
 
 
 
-        Vector2 direction = (corner - current).normalized;
+        ////Vector2 direction = (corner - current).normalized;
+
+
         /*RaycastHit2D hit = Physics2D.Raycast(current, direction);
 
         Vector3 rayOrigin = transform.position;
@@ -285,7 +276,9 @@ public class NavMeshAgent2D : MonoBehaviour
         }
 */
         // 移動
-        transform.Translate(direction * speed * Time.deltaTime);
+        ////transform.Translate(direction * speed * Time.deltaTime);
+
+
         //エージェントを進行方向に向く
         //transform.up = direction.normalized;
 
