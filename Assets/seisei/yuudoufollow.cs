@@ -28,6 +28,7 @@ public class yuudoufollow : MonoBehaviour
     public Transform[] waypoints;
     List<string> rescue = new List<string>();//今までに助けたエージェントのリスト
 
+    LineRenderer line;//壁越しのエージェントを見分ける
 
     Vector3 lastPos;
 
@@ -44,6 +45,8 @@ public class yuudoufollow : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         lastPos = transform.position;
+
+        
     }
 void Update()
     {
@@ -70,7 +73,7 @@ void Update()
         Vector2 velocity =(Vector2) (transform.position - lastPos);
         lastPos = transform.position;
 
-        Debug.Log(velocity);
+        //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
         if (velocity != Vector2.zero)
         {
             Debug.Log("C");
@@ -108,7 +111,7 @@ void Update()
             //Debug.Log(path.corners[i]);
 
             if (i == path.corners.Length - 1) continue;
-            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100); 
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.yellow, 100); 
 
         }
         transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);
@@ -135,8 +138,8 @@ void Update()
     //子からの情報を受け取るメソッド
     public void hantei(GameObject otherObject)
     {
-        
 
+    
         //きれいに書き換えArray.Resize(ref 配列オブジェクト, 新しいサイズ);
         if (kyuujosha == null)
         // 今までに助けたエージェントのリストにいなかったら向かう

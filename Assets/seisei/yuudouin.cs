@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class yuudouin : MonoBehaviour
 {
@@ -9,59 +10,196 @@ public class yuudouin : MonoBehaviour
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
     public bool force = true;
+    int j = 0; //cornerたどるたび増える
+    int k = 0;//poligonとぶつかったら
+
+    private Rigidbody2D rb;//回転のrb
 
     [HideInInspector]//常にUnityエディタから非表示
     private Vector2 trace_area = Vector2.zero;
-    public Vector2 destination
+
+    yuudouin agent; //NavMeshAgent2Dを使用するための変数
+    public GameObject siya;
+    Vector3[] Pathcorners = new Vector3[100];
+
+    [SerializeField] Transform target; //追跡するターゲット
+
+    LineRenderer line;//壁越しのエージェントを見分ける
+
+    Vector3 lastPos;
+    //壁・エージェント同士の避け合い
+
+    public float desiredSeparation = 1.5f;
+    public float wallAvoidanceDistance = 3.0f;
+    private Vector3 AgentDestination;
+
+    public float A = 1.0f;
+    public float B = 1.0f;
+    public float gamma = 1.0f;
+    public float kappa = 1.0f;
+    public float avoidanceRadius = 0.3f;
+    public LayerMask agentLayer;
+
+    public float wallAvoidanceForce = 5.0f;
+    private Vector2 AgentForce = new Vector2(0f, 0f);
+
+
+
+    Vector3 randomPoint = Vector3.zero;
+    //ランダム地点に障害物があるかのwhile文で使用
+    bool ObstacleHit = true;
+    //エージェントの半径（ランダム地点に障害物があるか判別するため)
+    private float castRadius = 0.3f;//スケールの1/2
+
+    void Start()
     {
-        get { return trace_area; }
-        set
+
+
+        //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+        while (ObstacleHit)
         {
-            trace_area = value;
-            Trace(transform.position, value);
+            SetRandomDestination();
+            // 半径内のすべてのCollider2Dを検出
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+            ObstacleHit = false;
+            // 各Collider2Dに対して処理
+            foreach (Collider2D collider in colliders)
+            {
+                // タグが指定した障害物のタグと一致するか確認
+                if (collider.CompareTag("obstacle"))
+                {
+                    Debug.Log("yaaaa");
+                    ObstacleHit = true;
+                    break; // 障害物が一つでも検出されたらループを抜ける
+                }
+            }
         }
+
+
+
+
+        //traceで使うnavmeshのpathの初期設定
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, AgentDestination, NavMesh.AllAreas, path);
+        Pathcorners = path.corners;
+
+        //移動開始
+        //MoveToWaypoint(waypoints[k]);
+
+        //回転のrb
+        rb = GetComponent<Rigidbody2D>();
+
+        lastPos = transform.position;
+
+
     }
-    public bool SetDestination(Vector2 target)
+    void Update()
     {
-        destination = target;
-        return true;
+
+        AgentForce = Vector2.zero;//リセット
+        //エージェント同士の衝突回避
+        Collider2D[] nearbyAgents = Physics2D.OverlapCircleAll(transform.position, avoidanceRadius, agentLayer);
+        foreach (var agentCollider in nearbyAgents)
+        {
+            Debug.Log(agentCollider.gameObject);
+            if (agentCollider.gameObject != gameObject)
+            {
+                Debug.Log("foreach");
+                AgentForce += CalculateForce(agentCollider.transform.position);
+            }
+        }
+        ///<summary>以下回転</summary>
+
+        Vector2 velocity = (Vector2)(transform.position - lastPos);
+        lastPos = transform.position;
+
+        //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
+        if (velocity != Vector2.zero)
+        {
+            Debug.Log("C");
+            // 速度ベクトルから角度を計算（度数法）
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            // オブジェクトを回転
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
+
+
+        // 目的地に到達したら新しいランダムな目的地を設定
+        float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
+        if (distanceToTarget < 0.5f)
+        {
+            ObstacleHit = true;
+            //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+            while (ObstacleHit)
+            {
+                SetRandomDestination();
+                // 半径内のすべてのCollider2Dを検出
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+                ObstacleHit = false;
+                // 各Collider2Dに対して処理
+                foreach (Collider2D collider in colliders)
+                {
+                    // タグが指定した障害物のタグと一致するか確認
+                    if (collider.CompareTag("obstacle"))
+                    {
+                        Debug.Log("yaaaa");
+                        ObstacleHit = true;
+                        break; // 障害物が一つでも検出されたらループを抜ける
+                    }
+                }
+            }
+        }
+        Trace(transform.position, AgentDestination);
+
     }
 
-    
+    void FixedUpdate()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, GetComponent<Rigidbody2D>().velocity.normalized, wallAvoidanceDistance);
+
+        if (hit.collider != null && hit.collider.CompareTag("obstacle"))
+        {
+            Vector2 wallAvoidanceDirection = ((Vector2)transform.position - hit.point).normalized;
+            GetComponent<Rigidbody2D>().AddForce(wallAvoidanceDirection * wallAvoidanceForce);
+        }
+    }
+
     private void Trace(Vector2 current, Vector2 target)
     {
-       if (force == true)
-           {
-                if (Vector2.Distance(current, target) <= stoppingDistance)
-            {
-                return;
-            }
-
-            // NavMesh に応じて経路を求める
-            NavMeshPath path = new NavMeshPath();
-            NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
-
-            Vector2 corner = path.corners[0];
-
-            if (Vector2.Distance(current, corner) <= 0.05f)
-            {
-                corner = path.corners[1];
-            }
-            for (int i = 0; i < path.corners.Length; i++)
-            {
-                //Debug.Log(path.corners[i]);
-
-                if (i == path.corners.Length - 1) continue;
-                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
-                kakudo += (path.corners[i].x - path.corners[i + 1].x) * (path.corners[i].x - path.corners[i + 1].x) + (path.corners[i].y - path.corners[i + 1].y) * (path.corners[i].y - path.corners[i + 1].y);
-                transform.rotation = Quaternion.Euler(0, 0, kakudo);//誘導員を移動方向に回転させる
-            }
-            transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);
-
-            
+        if (Vector2.Distance(current, target) <= stoppingDistance)
+        {
+            return;
         }
-        force = false;
+
+        // NavMesh に応じて経路を求める
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
+
+        Vector2 corner = path.corners[0];
+
+        if (Vector2.Distance(current, corner) <= 0.2f)
+        {
+            corner = path.corners[1];
+        }
+        for (int i = 0; i < path.corners.Length; i++)
+        {
+
+
+            //Debug.Log(path.corners[i]);
+
+            if (i == path.corners.Length - 1) continue;
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+
+        }
+        transform.position = Vector2.MoveTowards(current, corner + AgentForce, speed * Time.deltaTime);
+        Debug.Log(AgentForce+"aaa");
+        Debug.Log(current+"bbb");
+        Debug.Log(corner + AgentForce+"ccc");
     }
+
     ///<summary>ぶつかったら消える</summary>
     void OnCollisionEnter2D(Collision2D other)
     {
@@ -70,7 +208,58 @@ public class yuudouin : MonoBehaviour
             Destroy(this.gameObject);
             isTouched = false;
         }
-        force = true;
+    }
+    void OnCollisionStay2D(Collision2D other)
+    {
+
+    }
+    //ランダムな目的地設定
+    void SetRandomDestination()
+    {
+        // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
+        float randomX = Random.Range(-8.66f, 21f);
+        float randomY = Random.Range(-15f, 19.5f);
+        /*Debug.Log(randomX);
+        Debug.Log(randomY);*/
+        AgentDestination = new Vector3(randomX, randomY, 0.0f);
+    }
+
+
+    //エージェント同士のよけ合い
+    Vector2 CalculateForce(Vector2 agentPosition)
+    {
+        Vector2 direction = (Vector2)transform.position - agentPosition;
+        float distance = direction.magnitude;
+        Debug.Log(castRadius);
+        Vector2 normalizedDirection = direction.normalized;
+
+
+        float radiusSum = GetComponent<Collider2D>().bounds.extents.magnitude + avoidanceRadius;
+        float relativeDistance = radiusSum - distance;
+
+        // 第一項の計算
+        float firstTerm = A * Mathf.Exp((relativeDistance / B));
+
+        // 第二項の計算
+        Vector2 secondTerm = new Vector2(0f, 0f);
+        if (relativeDistance > 0.0f)
+        {
+            // エージェントの相対速度を計算
+            Vector2 relativeVelocity = GetComponent<Rigidbody2D>().velocity;
+
+            // 第二項のガンマ g 関数の計算
+            float gFunction = relativeDistance > 0.0f ? 1.0f : 0.0f;
+
+            // 第二項の各成分の計算
+            Vector2 secondTermPart1 = gamma * gFunction * normalizedDirection;
+            Vector2 secondTermPart2 = kappa * gFunction * relativeVelocity;
+
+            secondTerm = secondTermPart1 + secondTermPart2;
+        }
+
+        // 合力の計算
+        
+        return firstTerm * normalizedDirection + secondTerm;
+
     }
 }
-

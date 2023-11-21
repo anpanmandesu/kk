@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5352373627845782709}
   - component: {fileID: -5666681976255726307}
   m_Layer: 0
-  m_Name: seki
+  m_Name: seki 1
   m_TagString: obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

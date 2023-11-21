@@ -3,7 +3,7 @@ using UnityEngine;
 // オブジェクトの向きを取得する
 public class CalcDirection : MonoBehaviour
 {
-    private Transform _transform;
+   /* private Transform _transform;
 
     private void Start()
     {
@@ -13,7 +13,7 @@ public class CalcDirection : MonoBehaviour
 
     private void Update()
     {
-        // 正面・右・上向き
+        // 正面・右・上向き 
         var forward = _transform.forward;
         var right = _transform.right;
         var up = _transform.up;
@@ -25,5 +25,5 @@ public class CalcDirection : MonoBehaviour
 
         // ログ表示
         //Debug.Log($"正面:{forward}, 右:{right}, 上:{up}, 後ろ{back}, 左{left}, 下{down}");
-    }
+    }*/
 }
