@@ -7,30 +7,32 @@ public class yuudoufollow : MonoBehaviour
     [Header("Steering")]
     public float speed = 1.0f;
     public float stoppingDistance = 0; 
-    public bool isTouched = false;//‚Ô‚Â‚©‚Á‚½‚©‚Ç‚¤‚©‚Ì”»’è
+    public bool isTouched = false;//ï¿½Ô‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½
     float kakudo = -90f;
     public bool force = true;
-    int j = 0; //corner‚½‚Ç‚é‚½‚Ñ‘‚¦‚é
-    int k = 0;//poligon‚Æ‚Ô‚Â‚©‚Á‚½‚ç
+    int j = 0; //cornerï¿½ï¿½ï¿½Ç‚é‚½ï¿½Ñ‘ï¿½ï¿½ï¿½ï¿½ï¿½
+    int k = 0;//poligonï¿½Æ‚Ô‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    private Rigidbody2D rb;//‰ñ“]‚Ìrb
+    private Rigidbody2D rb;//ï¿½ï¿½]ï¿½ï¿½rb
 
-    [HideInInspector]//í‚ÉUnityƒGƒfƒBƒ^‚©‚ç”ñ•\¦
+    [HideInInspector]//ï¿½ï¿½ï¿½Unityï¿½Gï¿½fï¿½Bï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
     private Vector2 trace_area = Vector2.zero;
 
-    yuudouin agent; //NavMeshAgent2D‚ğg—p‚·‚é‚½‚ß‚Ì•Ï”
+    yuudouin agent; //NavMeshAgent2Dï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½é‚½ï¿½ß‚Ì•Ïï¿½
     public GameObject siya;
     Vector3[] Pathcorners = new Vector3[100];
 
-    [SerializeField] Transform target; //’ÇÕ‚·‚éƒ^[ƒQƒbƒg
-    //q‚©‚çó‚¯æ‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg
+    [SerializeField] Transform target; //ï¿½ÇÕ‚ï¿½ï¿½ï¿½^ï¿½[ï¿½Qï¿½bï¿½g
+    //ï¿½qï¿½ï¿½ï¿½ï¿½ó‚¯ï¿½ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g
     public GameObject kyuujosha = null;
     public Transform[] waypoints;
-    List<string> rescue = new List<string>();//¡‚Ü‚Å‚É•‚¯‚½ƒG[ƒWƒFƒ“ƒg‚ÌƒŠƒXƒg
+    List<string> rescue = new List<string>();//ï¿½ï¿½ï¿½Ü‚Å‚Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìƒï¿½ï¿½Xï¿½g
 
-    LineRenderer line;//•Ç‰z‚µ‚ÌƒG[ƒWƒFƒ“ƒg‚ğŒ©•ª‚¯‚é
+    LineRenderer line;//ï¿½Ç‰zï¿½ï¿½ï¿½ÌƒGï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     Vector3 lastPos;
+
+    
 
     void Start()
     {
@@ -38,10 +40,10 @@ public class yuudoufollow : MonoBehaviour
         NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
         Pathcorners = path.corners;
 
-        //ˆÚ“®ŠJn
+        //ï¿½Ú“ï¿½ï¿½Jï¿½n
         //MoveToWaypoint(waypoints[k]);
 
-        //‰ñ“]‚Ìrb
+        //ï¿½ï¿½]ï¿½ï¿½rb
         rb = GetComponent<Rigidbody2D>();
 
         lastPos = transform.position;
@@ -52,7 +54,7 @@ void Update()
     {
         if (k >= 0)
         {
-            //Œ»İ‚Ì–Ú•W’l‚Ö‚Ì‹——£‚ğŒvZ
+            //ï¿½ï¿½ï¿½İ‚Ì–Ú•Wï¿½lï¿½Ö‚Ì‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
             float distanceToWaypoint = Vector3.Distance(transform.position, waypoints[k].position);
 
             if (distanceToWaypoint < 0.5f)
@@ -68,19 +70,19 @@ void Update()
         
         Debug.Log(k);
 
-        ///<summary>ˆÈ‰º‰ñ“]</summary>
+        ///<summary>ï¿½È‰ï¿½ï¿½ï¿½]</summary>
 
         Vector2 velocity =(Vector2) (transform.position - lastPos);
         lastPos = transform.position;
 
-        //Debug.Log(velocity);//ƒtƒŒ[ƒ€‚²‚Æ‚Étransform‚ğ•ÏX‚µ‚ÄuŠÔˆÚ“®‚µ‚Ä‚¢‚é‚¾‚¯‚¾‚©‚ç•ûŒüƒxƒNƒgƒ‹‚Í(0,0)
+        //Debug.Log(velocity);//ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½transformï¿½ï¿½ÏXï¿½ï¿½ï¿½Äuï¿½ÔˆÚ“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½(0,0)
         if (velocity != Vector2.zero)
         {
             Debug.Log("C");
-            // ‘¬“xƒxƒNƒgƒ‹‚©‚çŠp“x‚ğŒvZi“x”–@j
+            // ï¿½ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½xï¿½ï¿½ï¿½vï¿½Zï¿½iï¿½xï¿½ï¿½ï¿½@ï¿½j
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
 
-            // ƒIƒuƒWƒFƒNƒg‚ğ‰ñ“]
+            // ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½]
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
 
@@ -94,7 +96,7 @@ void Update()
             return;
         }
 
-        // NavMesh ‚É‰‚¶‚ÄŒo˜H‚ğ‹‚ß‚é
+        // NavMesh ï¿½É‰ï¿½ï¿½ï¿½ï¿½ÄŒoï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
 
@@ -117,7 +119,7 @@ void Update()
         transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);
     }
 
-    ///<summary>‚Ô‚Â‚©‚Á‚½‚çÁ‚¦‚é</summary>
+    ///<summary>ï¿½Ô‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
@@ -135,14 +137,14 @@ void Update()
     {
         
     }
-    //q‚©‚ç‚Ìî•ñ‚ğó‚¯æ‚éƒƒ\ƒbƒh
+    //ï¿½qï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ó‚¯ï¿½éƒï¿½\ï¿½bï¿½h
     public void hantei(GameObject otherObject)
     {
 
     
-        //‚«‚ê‚¢‚É‘‚«Š·‚¦Array.Resize(ref ”z—ñƒIƒuƒWƒFƒNƒg, V‚µ‚¢ƒTƒCƒY);
+        //ï¿½ï¿½ï¿½ê‚¢ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Array.Resize(ref ï¿½zï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g, ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Y);
         if (kyuujosha == null)
-        // ¡‚Ü‚Å‚É•‚¯‚½ƒG[ƒWƒFƒ“ƒg‚ÌƒŠƒXƒg‚É‚¢‚È‚©‚Á‚½‚çŒü‚©‚¤
+        // ï¿½ï¿½ï¿½Ü‚Å‚Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìƒï¿½ï¿½Xï¿½gï¿½É‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (rescue.Contains(otherObject.name))
             {
                 kyuujosha = null;
@@ -150,10 +152,10 @@ void Update()
             else
             {
                 kyuujosha = otherObject;
-                //Ÿ‚Ì’n“_‚ÉŒü‚©‚¤‚½‚ß‚É99
+                //ï¿½ï¿½ï¿½Ì’nï¿½_ï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½99
                 k -= 99;
                 Debug.Log("b");
-                rescue.Add(otherObject.name);// ¡‚Ü‚Å‚É•‚¯‚½ƒG[ƒWƒFƒ“ƒg‚ÌƒŠƒXƒg‚É’Ç‰Á
+                rescue.Add(otherObject.name);// ï¿½ï¿½ï¿½Ü‚Å‚Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìƒï¿½ï¿½Xï¿½gï¿½É’Ç‰ï¿½
             }
         }
     

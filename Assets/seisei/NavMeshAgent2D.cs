@@ -55,11 +55,12 @@ public class NavMeshAgent2D : MonoBehaviour
     private float castRadius = 0.3f;//スケールの1/2
     private NavMeshAgent navMeshAgent;
 
-    //ランダム地点
+    //ランダム歩行しているか
+    bool randomwalk = true;
     void Start()
     {
         speed = Random.Range(0.5f, 3f);
-        Debug.Log(speed);
+        //Debug.Log(speed);
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
@@ -109,7 +110,7 @@ public class NavMeshAgent2D : MonoBehaviour
     void Update()
     {
         // 回転をゼロに設定
-        transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
         
 
         AgentForce = Vector2.zero;//リセット
@@ -184,32 +185,37 @@ public class NavMeshAgent2D : MonoBehaviour
         //     /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
         // }
 
-
-        // 目的地に到達したら新しいランダムな目的地を設定
-        float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
-        if (distanceToTarget < 0.5f)
-        {
-            ObstacleHit = true;
-            //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
-            while (ObstacleHit)
+        if(randomwalk == true){
+            // 目的地に到達したら新しいランダムな目的地を設定
+            float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
+            if (distanceToTarget < 0.5f)
             {
-                SetRandomDestination();
-                // 半径内のすべてのCollider2Dを検出
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
-
-                ObstacleHit = false;
-                // 各Collider2Dに対して処理
-                foreach (Collider2D collider in colliders)
+                ObstacleHit = true;
+                //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+                while (ObstacleHit)
                 {
-                    // タグが指定した障害物のタグと一致するか確認
-                    if (collider.CompareTag("obstacle"))
+                    SetRandomDestination();
+                    // 半径内のすべてのCollider2Dを検出
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+                    ObstacleHit = false;
+                    // 各Collider2Dに対して処理
+                    foreach (Collider2D collider in colliders)
                     {
-                        Debug.Log("yaaaa");
-                        ObstacleHit = true;
-                        break; // 障害物が一つでも検出されたらループを抜ける
+                        // タグが指定した障害物のタグと一致するか確認
+                        if (collider.CompareTag("obstacle"))
+                        {
+                            Debug.Log("yaaaa");
+                            ObstacleHit = true;
+                            break; // 障害物が一つでも検出されたらループを抜ける
+                        }
                     }
                 }
             }
+        }
+        //出口を見つけて、目的地を出口にした場合
+        else{
+            AgentDestination = target.position;
         }
         Trace(transform.position, AgentDestination);
     
@@ -375,4 +381,10 @@ public class NavMeshAgent2D : MonoBehaviour
         return firstTerm * normalizedDirection + secondTerm;
         
     }*/
+
+    public void hantei(GameObject otherObject)
+    {
+        randomwalk = false;
+        target = otherObject.transform;
+        }
 }
