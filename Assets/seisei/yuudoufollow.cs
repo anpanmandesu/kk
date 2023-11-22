@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class yuudoufollow : MonoBehaviour
 {
+    
     [Header("Steering")]
     public float speed = 1.0f;
     public float stoppingDistance = 0; 
@@ -68,7 +69,7 @@ void Update()
             Trace(transform.position, kyuujosha.transform.position);
         }
         
-        Debug.Log(k);
+        //Debug.Log(k);
 
         ///<summary>�ȉ���]</summary>
 
@@ -78,7 +79,7 @@ void Update()
         //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
         if (velocity != Vector2.zero)
         {
-            Debug.Log("C");
+            //Debug.Log("C");
             // ���x�x�N�g������p�x���v�Z�i�x���@�j
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
 
@@ -154,7 +155,7 @@ void Update()
                 kyuujosha = otherObject;
                 //���̒n�_�Ɍ��������߂�99
                 k -= 99;
-                Debug.Log("b");
+                //Debug.Log("b");
                 rescue.Add(otherObject.name);// ���܂łɏ������G�[�W�F���g�̃��X�g�ɒǉ�
             }
         }

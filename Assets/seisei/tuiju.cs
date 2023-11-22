@@ -43,7 +43,7 @@ public class tuiju : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("D");
+        //Debug.Log("D");
         //合流地点についたら停止する
         if (other.gameObject.tag == "Confluence")
         {

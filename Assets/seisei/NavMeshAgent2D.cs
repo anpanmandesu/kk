@@ -80,7 +80,7 @@ public class NavMeshAgent2D : MonoBehaviour
                 // タグが指定した障害物のタグと一致するか確認
                 if (collider.CompareTag("obstacle"))
                 {
-                    Debug.Log("yaaaa");
+                    //Debug.Log("yaaaa");
                     ObstacleHit = true;
                     break; // 障害物が一つでも検出されたらループを抜ける
                 }
@@ -218,7 +218,21 @@ public class NavMeshAgent2D : MonoBehaviour
             AgentDestination = target.position;
         }
         Trace(transform.position, AgentDestination);
-    
+
+        ///<summary>�ȉ���]</summary>
+    Vector2 velocity =(Vector2) (transform.position - lastPos);
+        lastPos = transform.position;
+
+        //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
+        if (velocity != Vector2.zero)
+        {
+            //Debug.Log("C");
+            // ���x�x�N�g������p�x���v�Z�i�x���@�j
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            // �I�u�W�F�N�g����]
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
     }
 
     void FixedUpdate()
@@ -387,4 +401,42 @@ public class NavMeshAgent2D : MonoBehaviour
         randomwalk = false;
         target = otherObject.transform;
         }
+    //誘導員を見つけた際、近くの出口が目的地になる
+    public void golehantei(){
+        randomwalk = false;
+        target = FindNearestObjectWithTag("Player");
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+
+    float minDistance = Mathf.Infinity;
+    foreach (Vector3 corner in path.corners)
+            {
+                float distance = Vector3.Distance(transform.position, corner);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                }
+            }
+            //Debug.Log("Nearest distance: " + minDistance);
+    }
+
+    Transform FindNearestObjectWithTag(string tag)
+    {
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+        Transform nearestObject = null;
+        float minDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject obj in objectsWithTag)
+        {
+            float distance = Vector3.Distance(obj.transform.position, currentPosition);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestObject = obj.transform;
+            }
+        }
+
+        return nearestObject;
+    }
 }

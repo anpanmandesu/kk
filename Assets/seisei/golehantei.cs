@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class golehantei : MonoBehaviour
 {
+    public float viewRadius = 10f;        // 視野の半径
+    public float viewAngle = 40f;        // 視野の角度(左右にはそれぞれviewAngle/2)
     public GameObject kyuujo;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
@@ -16,7 +18,7 @@ public class golehantei : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        
     }
     /// <summary>
     ///�@����ipolygon)�ɓ����Ȃ��G�[�W�F���g(tag==Finish)���������Ƃ�
@@ -41,9 +43,27 @@ public class golehantei : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
-            transform.parent.GetComponent<NavMeshAgent2D>().hantei(other.gameObject);
-            isTouched = false;
+            DetectCollidersInFieldOfView(other.gameObject);
+            
         }
 
+    }   
+    //範囲（viewAngle度)の中にあるオブジェクトだけ検知
+    void DetectCollidersInFieldOfView(GameObject otherObject)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, viewRadius);
+
+        foreach (Collider2D collider in colliders)
+        {
+            Vector2 dirToCollider = (collider.transform.position - transform.position).normalized;
+            float angleToCollider = Vector2.Angle(transform.up, dirToCollider);
+
+            // 視野角度内のColliderだけを検知
+            if (angleToCollider < viewAngle * 0.5f&&collider.name == otherObject.gameObject.name)
+            {
+                transform.parent.GetComponent<NavMeshAgent2D>().hantei(otherObject);
+                isTouched = false;
+            }
+        }
     }
 }

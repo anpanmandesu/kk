@@ -5,89 +5,102 @@ using System.Collections.Generic;
 public class yuudouin : MonoBehaviour
 {
     [Header("Steering")]
-    public float speed = 1.0f;
+    public float speed;
     public float stoppingDistance = 0;
-    public bool isTouched = false;//‚Ô‚Â‚©‚Á‚½‚©‚Ç‚¤‚©‚Ì”»’è
+    public bool isTouched = false;//ã¶ã¤ã‹ã£ãŸã‹ã©ã†ã‹ã®åˆ¤å®š
     float kakudo = -90f;
     public bool force = true;
-    int j = 0; //corner‚½‚Ç‚é‚½‚Ñ‘‚¦‚é
-    int k = 0;//poligon‚Æ‚Ô‚Â‚©‚Á‚½‚ç
+    int j = 0; //cornerãŸã©ã‚‹ãŸã³å¢—ãˆã‚‹ã€€
+    int k = 0;//poligonã¨ã¶ã¤ã‹ã£ãŸã‚‰
+    //å£ã‹ã‚‰ã®æ–¥åŠ›
+    public string wallTag = "obstacle";
+    public float repulsionForce = 10f;//å£ã‹ã‚‰ã®æ–¥åŠ›
+    public float raycastDistance = 1f;
 
-    private Rigidbody2D rb;//‰ñ“]‚Ìrb
+    private Rigidbody2D rb;//å›è»¢ã®rb
 
-    [HideInInspector]//í‚ÉUnityƒGƒfƒBƒ^‚©‚ç”ñ•\¦
+    [HideInInspector]//å¸¸ã«Unityã‚¨ãƒ‡ã‚£ã‚¿ã‹ã‚‰éè¡¨ç¤º
     private Vector2 trace_area = Vector2.zero;
 
-    yuudouin agent; //NavMeshAgent2D‚ğg—p‚·‚é‚½‚ß‚Ì•Ï”
+    yuudouin agent; //NavMeshAgent2Dã‚’ä½¿ç”¨ã™ã‚‹ãŸã‚ã®å¤‰æ•°
     public GameObject siya;
     Vector3[] Pathcorners = new Vector3[100];
 
-    [SerializeField] Transform target; //’ÇÕ‚·‚éƒ^[ƒQƒbƒg
+    [SerializeField] Transform target; //è¿½è·¡ã™ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 
-    LineRenderer line;//•Ç‰z‚µ‚ÌƒG[ƒWƒFƒ“ƒg‚ğŒ©•ª‚¯‚é
+    LineRenderer line;//å£è¶Šã—ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã‚’è¦‹åˆ†ã‘ã‚‹
 
     Vector3 lastPos;
-    //•ÇEƒG[ƒWƒFƒ“ƒg“¯m‚Ì”ğ‚¯‡‚¢
+    //å£ãƒ»ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®é¿ã‘åˆã„
 
     public float desiredSeparation = 1.5f;
     public float wallAvoidanceDistance = 3.0f;
     private Vector3 AgentDestination;
 
     public float A = 1.0f;
-    public float B = 1.0f;
+    public float B = 0.1f;
     public float gamma = 1.0f;
     public float kappa = 1.0f;
     public float avoidanceRadius = 0.3f;
     public LayerMask agentLayer;
 
     public float wallAvoidanceForce = 5.0f;
-    private Vector2 AgentForce = new Vector2(0f, 0f);
-
+    private Vector2 AgentForce = new Vector2(0f,0f);
 
 
     Vector3 randomPoint = Vector3.zero;
-    //ƒ‰ƒ“ƒ_ƒ€’n“_‚ÉáŠQ•¨‚ª‚ ‚é‚©‚Ìwhile•¶‚Åg—p
+    //ãƒ©ãƒ³ãƒ€ãƒ åœ°ç‚¹ã«éšœå®³ç‰©ãŒã‚ã‚‹ã‹ã®whileæ–‡ã§ä½¿ç”¨
     bool ObstacleHit = true;
-    //ƒG[ƒWƒFƒ“ƒg‚Ì”¼Œaiƒ‰ƒ“ƒ_ƒ€’n“_‚ÉáŠQ•¨‚ª‚ ‚é‚©”»•Ê‚·‚é‚½‚ß)
-    private float castRadius = 0.3f;//ƒXƒP[ƒ‹‚Ì1/2
+    //ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®åŠå¾„ï¼ˆãƒ©ãƒ³ãƒ€ãƒ åœ°ç‚¹ã«éšœå®³ç‰©ãŒã‚ã‚‹ã‹åˆ¤åˆ¥ã™ã‚‹ãŸã‚)
+    private float castRadius = 0.3f;//ã‚¹ã‚±ãƒ¼ãƒ«ã®1/2
+    private NavMeshAgent navMeshAgent;
 
+    //ãƒ©ãƒ³ãƒ€ãƒ æ­©è¡Œã—ã¦ã„ã‚‹ã‹
+    bool randomwalk = true;
     void Start()
     {
+        speed = Random.Range(0.5f, 3f);
+        //Debug.Log(speed);
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
 
 
-        //ƒ‰ƒ“ƒ_ƒ€‚È’n“_‚É–Ú“I’ni‚»‚Ì’n“_‚ÌƒG[ƒWƒFƒ“ƒg”¼Œa‚¢‚È‚¢‚ÉáŠQ•¨‚ª‚È‚¢ê‡j
+        //ãƒ©ãƒ³ãƒ€ãƒ ãªåœ°ç‚¹ã«ç›®çš„åœ°ï¼ˆãã®åœ°ç‚¹ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŠå¾„ã„ãªã„ã«éšœå®³ç‰©ãŒãªã„å ´åˆï¼‰
         while (ObstacleHit)
         {
             SetRandomDestination();
-            // ”¼Œa“à‚Ì‚·‚×‚Ä‚ÌCollider2D‚ğŒŸo
+            // åŠå¾„å†…ã®ã™ã¹ã¦ã®Collider2Dã‚’æ¤œå‡º
             Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
 
             ObstacleHit = false;
-            // ŠeCollider2D‚É‘Î‚µ‚Äˆ—
+            // å„Collider2Dã«å¯¾ã—ã¦å‡¦ç†
             foreach (Collider2D collider in colliders)
             {
-                // ƒ^ƒO‚ªw’è‚µ‚½áŠQ•¨‚Ìƒ^ƒO‚Æˆê’v‚·‚é‚©Šm”F
+                // ã‚¿ã‚°ãŒæŒ‡å®šã—ãŸéšœå®³ç‰©ã®ã‚¿ã‚°ã¨ä¸€è‡´ã™ã‚‹ã‹ç¢ºèª
                 if (collider.CompareTag("obstacle"))
                 {
                     Debug.Log("yaaaa");
                     ObstacleHit = true;
-                    break; // áŠQ•¨‚ªˆê‚Â‚Å‚àŒŸo‚³‚ê‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
+                    break; // éšœå®³ç‰©ãŒä¸€ã¤ã§ã‚‚æ¤œå‡ºã•ã‚ŒãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
                 }
             }
         }
 
+        lastPos = transform.position;
 
 
 
-        //trace‚Åg‚¤navmesh‚Ìpath‚Ì‰Šúİ’è
+
+        //traceã§ä½¿ã†navmeshã®pathã®åˆæœŸè¨­å®š
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, AgentDestination, NavMesh.AllAreas, path);
         Pathcorners = path.corners;
 
-        //ˆÚ“®ŠJn
+        //ç§»å‹•é–‹å§‹
         //MoveToWaypoint(waypoints[k]);
 
-        //‰ñ“]‚Ìrb
+        //å›è»¢ã®rb
         rb = GetComponent<Rigidbody2D>();
 
         lastPos = transform.position;
@@ -96,64 +109,130 @@ public class yuudouin : MonoBehaviour
     }
     void Update()
     {
+        // å›è»¢ã‚’ã‚¼ãƒ­ã«è¨­å®š
+        transform.rotation = Quaternion.identity;//ã“ã‚ŒãŒãªã„ã¨navmeshAgentã§å›è»¢ã—ã¦ã—ã¾ã†
+        
 
-        AgentForce = Vector2.zero;//ƒŠƒZƒbƒg
-        //ƒG[ƒWƒFƒ“ƒg“¯m‚ÌÕ“Ë‰ñ”ğ
+        AgentForce = Vector2.zero;//ãƒªã‚»ãƒƒãƒˆ
+        /*//ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®è¡çªå›é¿
         Collider2D[] nearbyAgents = Physics2D.OverlapCircleAll(transform.position, avoidanceRadius, agentLayer);
         foreach (var agentCollider in nearbyAgents)
         {
             Debug.Log(agentCollider.gameObject);
             if (agentCollider.gameObject != gameObject)
             {
-                Debug.Log("foreach");
-                AgentForce += CalculateForce(agentCollider.transform.position);
-            }
-        }
-        ///<summary>ˆÈ‰º‰ñ“]</summary>
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+                Vector2 toAgent = agentCollider.transform.position - transform.position;
 
-        Vector2 velocity = (Vector2)(transform.position - lastPos);
-        lastPos = transform.position;
-
-        //Debug.Log(velocity);//ƒtƒŒ[ƒ€‚²‚Æ‚Étransform‚ğ•ÏX‚µ‚ÄuŠÔˆÚ“®‚µ‚Ä‚¢‚é‚¾‚¯‚¾‚©‚ç•ûŒüƒxƒNƒgƒ‹‚Í(0,0)
-        if (velocity != Vector2.zero)
-        {
-            Debug.Log("C");
-            // ‘¬“xƒxƒNƒgƒ‹‚©‚çŠp“x‚ğŒvZi“x”–@j
-            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-
-            // ƒIƒuƒWƒFƒNƒg‚ğ‰ñ“]
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        }
-
-
-        // –Ú“I’n‚É“’B‚µ‚½‚çV‚µ‚¢ƒ‰ƒ“ƒ_ƒ€‚È–Ú“I’n‚ğİ’è
-        float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
-        if (distanceToTarget < 0.5f)
-        {
-            ObstacleHit = true;
-            //ƒ‰ƒ“ƒ_ƒ€‚È’n“_‚É–Ú“I’ni‚»‚Ì’n“_‚ÌƒG[ƒWƒFƒ“ƒg”¼Œa‚¢‚È‚¢‚ÉáŠQ•¨‚ª‚È‚¢ê‡j
-            while (ObstacleHit)
-            {
-                SetRandomDestination();
-                // ”¼Œa“à‚Ì‚·‚×‚Ä‚ÌCollider2D‚ğŒŸo
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
-
-                ObstacleHit = false;
-                // ŠeCollider2D‚É‘Î‚µ‚Äˆ—
-                foreach (Collider2D collider in colliders)
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®è§’åº¦å·®
+                float angleDifference = Vector2.SignedAngle(velocity, toAgent);
+                if (Mathf.Abs(angleDifference) < 20f)
                 {
-                    // ƒ^ƒO‚ªw’è‚µ‚½áŠQ•¨‚Ìƒ^ƒO‚Æˆê’v‚·‚é‚©Šm”F
-                    if (collider.CompareTag("obstacle"))
+                    Debug.Log("foreach");
+                    AgentForce += CalculateForce(agentCollider.transform.position);//æ¤œçŸ¥ã—ãŸã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆ
+                }
+            }
+        }*/
+
+        // ä¸€å®šã®ç¯„å›²å†…ã«ã„ã‚‹ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã‚’å–å¾—
+        Collider2D[] nearbyAgents = Physics2D.OverlapCircleAll(transform.position, avoidanceRadius, agentLayer);
+/*
+        foreach (var agentCollider in nearbyAgents)
+        {
+            if (agentCollider.gameObject != gameObject)
+            {
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+                Vector2 toAgent = agentCollider.transform.position - transform.position;
+
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®è·é›¢
+                float distance = toAgent.magnitude;
+
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®åŠå¾„ã®åˆè¨ˆ
+                float radiusSum = castRadius*2;
+
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®å˜ä½ãƒ™ã‚¯ãƒˆãƒ«
+                Vector2 normalizedDirection = toAgent.normalized;
+
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®é€Ÿåº¦å·®
+                Vector2 velocityDifference = agentCollider.GetComponent<Rigidbody2D>().velocity - rb.velocity;
+
+                // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®ä¸­å¿ƒã‚’çµã‚“ã ç·šã«å¯¾ã—ã¦å‚ç›´ãªå˜ä½ãƒ™ã‚¯ãƒˆãƒ«
+                Vector2 tangentVector = new Vector2(-normalizedDirection.y, normalizedDirection.x);
+
+                // åŠ›ã®è¨ˆç®—
+                float forceMagnitude = A * Mathf.Exp((distance - radiusSum) / B) +
+                                       gamma * Mathf.Max(0, distance - radiusSum) +
+                                       kappa * Mathf.Max(0, distance - radiusSum) * Vector2.Dot(velocityDifference, tangentVector);
+                
+                AgentForce += forceMagnitude * normalizedDirection;
+            }
+            *//*// ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®é€Ÿåº¦ã‚’æ›´æ–°ã™ã‚‹
+            Vector2 acceleration = AgentForce / rb.mass;
+            rb.velocity += acceleration * Time.deltaTime;*//*
+        }*/
+            ///<summary>ä»¥ä¸‹å›è»¢</summary>
+
+
+
+            //Debug.Log(velocity);//ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«transformã‚’å¤‰æ›´ã—ã¦ç¬é–“ç§»å‹•ã—ã¦ã„ã‚‹ã ã‘ã ã‹ã‚‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã¯(0,0)
+        //     if (velocity != Vector2.zero)
+        // {
+        //     Debug.Log("C");
+        //     // é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰è§’åº¦ã‚’è¨ˆç®—ï¼ˆåº¦æ•°æ³•ï¼‰
+        //     float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+        //     // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›è»¢
+        //     /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
+        // }
+
+        if(randomwalk == true){
+            // ç›®çš„åœ°ã«åˆ°é”ã—ãŸã‚‰æ–°ã—ã„ãƒ©ãƒ³ãƒ€ãƒ ãªç›®çš„åœ°ã‚’è¨­å®š
+            float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
+            if (distanceToTarget < 0.5f)
+            {
+                ObstacleHit = true;
+                //ãƒ©ãƒ³ãƒ€ãƒ ãªåœ°ç‚¹ã«ç›®çš„åœ°ï¼ˆãã®åœ°ç‚¹ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŠå¾„ã„ãªã„ã«éšœå®³ç‰©ãŒãªã„å ´åˆï¼‰
+                while (ObstacleHit)
+                {
+                    SetRandomDestination();
+                    // åŠå¾„å†…ã®ã™ã¹ã¦ã®Collider2Dã‚’æ¤œå‡º
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+                    ObstacleHit = false;
+                    // å„Collider2Dã«å¯¾ã—ã¦å‡¦ç†
+                    foreach (Collider2D collider in colliders)
                     {
-                        Debug.Log("yaaaa");
-                        ObstacleHit = true;
-                        break; // áŠQ•¨‚ªˆê‚Â‚Å‚àŒŸo‚³‚ê‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
+                        // ã‚¿ã‚°ãŒæŒ‡å®šã—ãŸéšœå®³ç‰©ã®ã‚¿ã‚°ã¨ä¸€è‡´ã™ã‚‹ã‹ç¢ºèª
+                        if (collider.CompareTag("obstacle"))
+                        {
+                            Debug.Log("yaaaa");
+                            ObstacleHit = true;
+                            break; // éšœå®³ç‰©ãŒä¸€ã¤ã§ã‚‚æ¤œå‡ºã•ã‚ŒãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
+                        }
                     }
                 }
             }
         }
+        //å‡ºå£ã‚’è¦‹ã¤ã‘ã¦ã€ç›®çš„åœ°ã‚’å‡ºå£ã«ã—ãŸå ´åˆ
+        else{
+            AgentDestination = target.position;
+        }
         Trace(transform.position, AgentDestination);
 
+        ///<summary>ï¿½È‰ï¿½ï¿½ï¿½]</summary>
+    Vector2 velocity =(Vector2) (transform.position - lastPos);
+        lastPos = transform.position;
+
+        //Debug.Log(velocity);//ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½transformï¿½ï¿½ÏXï¿½ï¿½ï¿½Äuï¿½ÔˆÚ“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½(0,0)
+        if (velocity != Vector2.zero)
+        {
+            Debug.Log("C");
+            // ï¿½ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½xï¿½ï¿½ï¿½vï¿½Zï¿½iï¿½xï¿½ï¿½ï¿½@ï¿½j
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            // ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½]
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
     }
 
     void FixedUpdate()
@@ -167,16 +246,73 @@ public class yuudouin : MonoBehaviour
         }
     }
 
+
+
+    //navmesh
     private void Trace(Vector2 current, Vector2 target)
     {
-        if (Vector2.Distance(current, target) <= stoppingDistance)
+        navMeshAgent.SetDestination(target);
+
+
+        // NavMeshPath path = new NavMeshPath();
+        // NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
+
+        // Vector2 corner = path.corners[0];
+        // if (Vector2.Distance(current, corner) <= 0.3f)
+        // {
+        //     corner = path.corners[1];
+        // }
+        // for (int i = 0; i < path.corners.Length; i++)
+        // {
+
+
+        //     //Debug.Log(path.corners[i]);
+
+        //     if (i == path.corners.Length - 1) continue;
+        //     Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+
+        // }
+        
+
+
+
+
+
+
+        ////Vector2 direction = (corner - current).normalized;
+
+
+        /*RaycastHit2D hit = Physics2D.Raycast(current, direction);
+
+        Vector3 rayOrigin = transform.position;
+        Debug.DrawRay(rayOrigin, direction * 2f, Color.yellow);
+
+
+        if (hit.collider != null && hit.collider.CompareTag("obstacle"))
+        {
+            // å£ã‹ã‚‰ã®åç™ºåŠ›ã‚’è¨ˆç®—
+            Vector2 repelDirection = (current - hit.point).normalized;
+            direction = direction + (repulsionForce * repelDirection);
+        }
+*/
+        // ç§»å‹•
+        ////transform.Translate(direction * speed * Time.deltaTime);
+
+
+        //ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã‚’é€²è¡Œæ–¹å‘ã«å‘ã
+        //transform.up = direction.normalized;
+
+
+
+        /*if (Vector2.Distance(current, target) <= stoppingDistance)
         {
             return;
         }
 
-        // NavMesh ‚É‰‚¶‚ÄŒo˜H‚ğ‹‚ß‚é
+        // NavMesh ã«å¿œã˜ã¦çµŒè·¯ã‚’æ±‚ã‚ã‚‹
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
+
 
         Vector2 corner = path.corners[0];
 
@@ -194,13 +330,12 @@ public class yuudouin : MonoBehaviour
             Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
 
         }
-        transform.position = Vector2.MoveTowards(current, corner + AgentForce, speed * Time.deltaTime);
-        Debug.Log(AgentForce+"aaa");
-        Debug.Log(current+"bbb");
-        Debug.Log(corner + AgentForce+"ccc");
+        transform.position = Vector2.MoveTowards(current, corner+AgentForce, speed * Time.deltaTime);*/
     }
 
-    ///<summary>‚Ô‚Â‚©‚Á‚½‚çÁ‚¦‚é</summary>
+
+
+    ///<summary>ã¶ã¤ã‹ã£ãŸã‚‰æ¶ˆãˆã‚‹</summary>
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
@@ -213,10 +348,10 @@ public class yuudouin : MonoBehaviour
     {
 
     }
-    //ƒ‰ƒ“ƒ_ƒ€‚È–Ú“I’nİ’è
+    //ãƒ©ãƒ³ãƒ€ãƒ ãªç›®çš„åœ°è¨­å®š
     void SetRandomDestination()
     {
-        // 2Dƒ‰ƒ“ƒ_ƒ€‚ÈÀ•W‚ğæ“¾(Agent‚Ìtransform‚¨‚©‚µ‚¢‚©‚çcollider‚ÌInfo‚É‚ ‚éˆÊ’u‚ÅŒ©‚é‚±‚Æ)
+        // 2Dãƒ©ãƒ³ãƒ€ãƒ ãªåº§æ¨™ã‚’å–å¾—(Agentã®transformãŠã‹ã—ã„ã‹ã‚‰colliderã®Infoã«ã‚ã‚‹ä½ç½®ã§è¦‹ã‚‹ã“ã¨)
         float randomX = Random.Range(-8.66f, 21f);
         float randomY = Random.Range(-15f, 19.5f);
         /*Debug.Log(randomX);
@@ -225,41 +360,45 @@ public class yuudouin : MonoBehaviour
     }
 
 
-    //ƒG[ƒWƒFƒ“ƒg“¯m‚Ì‚æ‚¯‡‚¢
-    Vector2 CalculateForce(Vector2 agentPosition)
+    /*//ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆåŒå£«ã®ã‚ˆã‘åˆã„
+        Vector2 CalculateForce(Vector2 agentPosition)
     {
         Vector2 direction = (Vector2)transform.position - agentPosition;
-        float distance = direction.magnitude;
-        Debug.Log(castRadius);
+        float distance = direction.magnitude ;
         Vector2 normalizedDirection = direction.normalized;
 
 
-        float radiusSum = GetComponent<Collider2D>().bounds.extents.magnitude + avoidanceRadius;
+        float radiusSum = castRadius + avoidanceRadius;
         float relativeDistance = radiusSum - distance;
 
-        // ‘æˆê€‚ÌŒvZ
+        // ç¬¬ä¸€é …ã®è¨ˆç®—
         float firstTerm = A * Mathf.Exp((relativeDistance / B));
 
-        // ‘æ“ñ€‚ÌŒvZ
-        Vector2 secondTerm = new Vector2(0f, 0f);
+        // ç¬¬äºŒé …ã®è¨ˆç®—
+        Vector2 secondTerm = new Vector2(0f,0f);
         if (relativeDistance > 0.0f)
         {
-            // ƒG[ƒWƒFƒ“ƒg‚Ì‘Š‘Î‘¬“x‚ğŒvZ
+            // ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®ç›¸å¯¾é€Ÿåº¦ã‚’è¨ˆç®—
             Vector2 relativeVelocity = GetComponent<Rigidbody2D>().velocity;
 
-            // ‘æ“ñ€‚ÌƒKƒ“ƒ} g ŠÖ”‚ÌŒvZ
-            float gFunction = relativeDistance > 0.0f ? 1.0f : 0.0f;
-
-            // ‘æ“ñ€‚ÌŠe¬•ª‚ÌŒvZ
+            // ç¬¬äºŒé …ã®ã‚¬ãƒ³ãƒ g é–¢æ•°ã®è¨ˆç®—
+            float gFunction = relativeDistance > 0.0f ? relativeDistance : 0.0f;
+            // ç¬¬äºŒé …ã®å„æˆåˆ†ã®è¨ˆç®—
             Vector2 secondTermPart1 = gamma * gFunction * normalizedDirection;
             Vector2 secondTermPart2 = kappa * gFunction * relativeVelocity;
 
             secondTerm = secondTermPart1 + secondTermPart2;
         }
 
-        // ‡—Í‚ÌŒvZ
+        // åˆåŠ›ã®è¨ˆç®—
         
         return firstTerm * normalizedDirection + secondTerm;
+        
+    }*/
 
-    }
+    public void hantei(GameObject otherObject)
+    {
+        randomwalk = false;
+        target = otherObject.transform;
+        }
 }
