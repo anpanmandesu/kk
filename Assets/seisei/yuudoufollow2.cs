@@ -1,13 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-public class yuudoufollow : MonoBehaviour
+public class yuudoufollow2 : MonoBehaviour
 {
-    
+
     [Header("Steering")]
     public float speed = 2f;
-    public float stoppingDistance = 0; 
+    public float stoppingDistance = 0;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     float kakudo = -90f;
     public bool force = true;
@@ -92,11 +92,11 @@ public class yuudoufollow : MonoBehaviour
             }
         }
     }
-void Update()
+    void Update()
     {
-            // 回転をゼロに設定
-            transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
-            AgentForce = Vector2.zero;//リセット
+        // 回転をゼロに設定
+        transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
+        AgentForce = Vector2.zero;//リセット
         /* if (k >= 0)
      {
          //���݂̖ڕW�l�ւ̋������v�Z
@@ -115,10 +115,10 @@ void Update()
 
         //Debug.Log(k);
 
-            Trace(transform.position, AgentDestination);
+        Trace(transform.position, AgentDestination);
         ///<summary>�ȉ���]</summary>
 
-        Vector2 velocity =(Vector2) (transform.position - lastPos);
+        Vector2 velocity = (Vector2)(transform.position - lastPos);
         lastPos = transform.position;
 
         //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
@@ -137,81 +137,82 @@ void Update()
             AgentDestination = kyuujosha.transform.position;
         }
 
+
         //三人以上救助してたら
         if (nowrescue.Count == 3)
         {
             AgentDestination = receivepoint.position;
         }
 
-            if (randomwalk == true)
+        if (randomwalk == true)
+        {
+            // 目的地に到達したら新しいランダムな目的地を設定
+            float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
+
+            if (distanceToTarget < 0.5f)
             {
-                // 目的地に到達したら新しいランダムな目的地を設定
-                float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
-           
-                if (distanceToTarget < 0.5f)
+                if (AgentDestination == receivepoint.position)
                 {
-                    if(AgentDestination == receivepoint.position)
-                    {
-                        nowrescue.Clear();
-                    }
-
-                        ObstacleHit = true;
-                        //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
-                        while (ObstacleHit)
-                        {
-                            SetRandomDestination();
-                            // 半径内のすべてのCollider2Dを検出
-                            Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
-
-                            ObstacleHit = false;
-                            // 各Collider2Dに対して処理
-                            foreach (Collider2D collider in colliders)
-                            {
-                                // タグが指定した障害物のタグと一致するか確認
-                                if (collider.CompareTag("obstacle"))
-                                {
-                                    Debug.Log("yaaaa");
-                                    ObstacleHit = true;
-                                    break; // 障害物が一つでも検出されたらループを抜ける
-                                }
-                            }
-                        }
-                    
+                    nowrescue.Clear();
                 }
-            }
 
-           
+                ObstacleHit = true;
+                //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+                while (ObstacleHit)
+                {
+                    SetRandomDestination();
+                    // 半径内のすべてのCollider2Dを検出
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+                    ObstacleHit = false;
+                    // 各Collider2Dに対して処理
+                    foreach (Collider2D collider in colliders)
+                    {
+                        // タグが指定した障害物のタグと一致するか確認
+                        if (collider.CompareTag("obstacle"))
+                        {
+                            Debug.Log("yaaaa");
+                            ObstacleHit = true;
+                            break; // 障害物が一つでも検出されたらループを抜ける
+                        }
+                    }
+                }
+
+            }
+        }
+
+
     }
     private void Trace(Vector2 current, Vector2 target)
     {
-            navMeshAgent.SetDestination(target);
-            /*if (Vector2.Distance(current, target) <= stoppingDistance)
-            {
-                return;
-            }
-
-            // NavMesh �ɉ����Čo�H�����߂�
-            NavMeshPath path = new NavMeshPath();
-            NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
-
-            Vector2 corner = path.corners[0];
-
-            if (Vector2.Distance(current, corner) <= 0.2f)
-            {
-                corner = path.corners[1];
-            }
-            for (int i = 0; i < path.corners.Length; i++)
-            {
-
-
-                //Debug.Log(path.corners[i]);
-
-                if (i == path.corners.Length - 1) continue;
-                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.yellow, 100); 
-
-            }
-            transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);*/
+        navMeshAgent.SetDestination(target);
+        /*if (Vector2.Distance(current, target) <= stoppingDistance)
+        {
+            return;
         }
+
+        // NavMesh �ɉ����Čo�H�����߂�
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
+
+        Vector2 corner = path.corners[0];
+
+        if (Vector2.Distance(current, corner) <= 0.2f)
+        {
+            corner = path.corners[1];
+        }
+        for (int i = 0; i < path.corners.Length; i++)
+        {
+
+
+            //Debug.Log(path.corners[i]);
+
+            if (i == path.corners.Length - 1) continue;
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.yellow, 100); 
+
+        }
+        transform.position = Vector2.MoveTowards(current, corner, speed * Time.deltaTime);*/
+    }
 
     ///<summary>�Ԃ������������</summary>
     void OnCollisionEnter2D(Collision2D other)
@@ -221,7 +222,7 @@ void Update()
             Destroy(this.gameObject);
             isTouched = false;
         }
-         if(other.gameObject == kyuujosha)
+        if (other.gameObject == kyuujosha)
         {
             nowrescue.Add(kyuujosha.name);
             kyuujo = false;
@@ -232,16 +233,16 @@ void Update()
     }
     void OnCollisionStay2D(Collision2D other)
     {
-        
+
     }
     //�q����̏����󂯎�郁�\�b�h
     public void hantei(GameObject otherObject)
     {
 
-    
+
         //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
         if (kyuujosha == null)
-        // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
+            // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
             if (rescue.Contains(otherObject.name))
             {
                 kyuujosha = null;
@@ -255,14 +256,14 @@ void Update()
                 rescue.Add(otherObject.name);// ���܂łɏ������G�[�W�F���g�̃��X�g�ɒǉ�
                 AgentDestination = kyuujosha.transform.position;
             }
-        }
+    }
 
     //ランダムな目的地設定
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
         float randomX = Random.Range(-8.66f, 21f);
-        float randomY = Random.Range(-15f, receivepoint.position.y);
+        float randomY = Random.Range(receive.transform.position.y,19.5f);
         /*Debug.Log(randomX);
         Debug.Log(randomY);*/
         AgentDestination = new Vector3(randomX, randomY, 0.0f);
@@ -270,7 +271,8 @@ void Update()
     //受け取り場所が近ければそちらに向かう(現在救助者が1人以上)
     public void pointhantei()
     {
-        if(nowrescue.Count >= 1){
+        if (nowrescue.Count >= 1)
+        {
             AgentDestination = receivepoint.position;
         }
     }

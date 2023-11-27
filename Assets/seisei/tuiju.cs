@@ -33,7 +33,7 @@ public class tuiju : MonoBehaviour
         }
         else
         {
-            if (other.gameObject.tag == "GameController")//誘導員のtagがGamecontroller
+            if (other.gameObject.tag == "rescue")//誘導員のtagがrescue
             {
                 target = other.gameObject;//追跡するターゲットに誘導員を割り当て
                 guide.Add(other.gameObject.name);//今までに助けられた誘導員リストに追加

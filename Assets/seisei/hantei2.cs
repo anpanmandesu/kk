@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hantei : MonoBehaviour
+public class hantei2 : MonoBehaviour
 {
     public float viewRadius = 5f; //視野半径(現在インスペクターで変更できる)
     public float viewAngle = 40f;// 視野の角度(左右にはそれぞれviewAngle/2)
+    public GameObject receive;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
     private LayerMask ignoreLayer;
@@ -46,13 +47,11 @@ public class hantei : MonoBehaviour
             
             bool Ob = ObstacleBetween(transform.position,other.transform.position,other.gameObject);
             if(Ob == false){
-                transform.parent.GetComponent<yuudoufollow>().hantei(other.gameObject);
+                transform.parent.GetComponent<yuudoufollow2>().hantei(other.gameObject);
             
                 isTouched = false;
             }
         }
-
-        
 
     }
 //colliderの指定した角度の中にオブジェクトがある場合のみの判定（途中に障害物がない）

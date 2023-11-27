@@ -43,37 +43,13 @@ public class yuudouinhantei : MonoBehaviour
 
         if (other.gameObject.tag == "GameController")
         {
-            bool Ob = ObstacleBetween(transform.position,other.transform.position,other.gameObject);
-            if(Ob == false){
-                transform.parent.GetComponent<yuudoufollow>().hantei(other.gameObject);
             
+            
+                transform.parent.GetComponent<NavMeshAgent2D>().golehantei();
+
                 isTouched = false;
-            }
+            
         }
 
-    }
-
-    
-    
-    bool ObstacleBetween(Vector2 start, Vector2 target,GameObject otherObject)
-    {
-        Vector2 rayDirection = otherObject.transform.position - transform.position;
-        float rayDistance = rayDirection.magnitude;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, rayDirection, rayDistance );
-            //int i = 1;
-          // hitsをループして処理
-         foreach (RaycastHit2D hit in hits)//rayにはOnTriggerStay2Dのオブジェクトは検知されない
-        {
-            //Debug.Log(i);
-            //Debug.Log(hit.collider);
-            // 当たったColliderが検知したオブジェクトでない場合
-           if(hit.collider != null){
-                if(hit.collider.CompareTag("Agent")||hit.collider.CompareTag("obstacle")||!otherObject == transform.root.gameObject){
-                    return true;
-                }
-            }
-            //i++;
-        }
-        return false;
     }
 }

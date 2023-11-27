@@ -9,6 +9,7 @@ TagManager:
   - obstacle
   - siya
   - others
+  - rescue
   layers:
   - Default
   - TransparentFX
