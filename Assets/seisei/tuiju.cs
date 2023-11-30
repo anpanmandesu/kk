@@ -4,51 +4,140 @@ using UnityEngine;
 
 public class tuiju : MonoBehaviour
 {
-    public GameObject target = null;
-
+    public GameObject target;
+    private GameObject lasttarget = null;//今助けに来ている誘導員
+    private GameObject targetx;//
+    private GameObject a;//直前に助けてた
+    List<GameObject> b = new List<GameObject>();//以前に助けないでと送信したことがある誘導員
 
     public bool isTouched = false;//ぶつかったかどうかの判定
     public bool active = false;
-    List<string> guide = new List<string>();//今までに助けられた誘導員リスト
-        void Update()
-        {
-        if (active == true)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 1.5f * Time.deltaTime);
-        }
-        
-        }
-    ///<summary>ぶつかったら消える</summary>
-    void OnCollisionEnter2D(Collision2D other)
+    List<GameObject> guide = new List<GameObject>();//今までに助けられた誘導員リスト
+    private float receivespeed = 0f;//受け渡し場所に来た時に移動する速度
+    private float speed = 0f;//普段の速度
+    private bool Con = false;//受け取り場所についたら誘導員からtrueを受け取る
+    private GameObject receivepoint;
+
+    void start()
     {
-        if (other.gameObject.tag == "Player")
+    }
+    void Update()
+    {
+        
+        if (active == false)
         {
-            Destroy(this.gameObject);
-            isTouched = false;
-        }
-        //今までに助けられていない誘導員かつ現在追跡していないかどうか(target==nullがないと追跡中もう一度誘導員に接触したら停止してしまう。)
-        if (target == null &&guide.Contains(other.gameObject.name))
-        {
-            target = null;
+            //速度がTime.deltaTimeを使わないとバグる
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);//誘導員に邪魔にならない速度
         }
         else
         {
-            if (other.gameObject.tag == "rescue")//誘導員のtagがrescue
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, receivespeed);
+        }
+        //受け取り場所の近くに来たら中心に動くようにする
+        if (Con)
+        {
+            receivespeed -= 0.01f * Time.deltaTime;
+        }
+        if (receivespeed < 0)
+        {
+            a.gameObject.SendMessage("senior",SendMessageOptions.DontRequireReceiver);
+            target = this.gameObject;
+            receivespeed = 0;
+            Con = false;
+            lastnull();
+            for (int i = 0; i < b.Count; i++)
             {
-                target = other.gameObject;//追跡するターゲットに誘導員を割り当て
-                guide.Add(other.gameObject.name);//今までに助けられた誘導員リストに追加
-                active = true;//動き出す
+                b[i].gameObject.SendMessage("guideclear",this.gameObject, SendMessageOptions.DontRequireReceiver);
             }
+        }
+        targetx = FindNearestObject();
+    }
+///<summary>ぶつかったら消える</summary>
+void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            a.gameObject.SendMessage("senior", SendMessageOptions.DontRequireReceiver);
+            Destroy(this.gameObject);
+            isTouched = false;
         }
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log("D");
-        //合流地点についたら停止する
-        if (other.gameObject.tag == "Confluence")
+        
+    }
+    void OnCollisionOccurred(bool u)
+    {
+        if (u)
         {
-            active = false;
-            target = null;
+            //今までに助けられていない誘導員かつ現在追跡していないかどうか
+            if (/*other.gameObject != target &&*/ !guide.Contains(targetx))
+            {
+                target = targetx;
+                a = targetx;
+            }         
+            receivespeed = 1.5f * Time.deltaTime;
+            active = true;
+        }
+    }
+
+    //一番近い誘導員を出す
+    GameObject FindNearestObject()
+    {
+        GameObject[] targetObjects = GameObject.FindGameObjectsWithTag("rescue");
+        GameObject nearestObject = null;
+        float nearestDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject targetObject in targetObjects)
+        {
+            float distance = Vector3.Distance(currentPosition, targetObject.transform.position);
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestObject = targetObject;
+            }
+        }
+
+        return nearestObject;
+    }
+    void ReceiveCollision(GameObject point)
+    {
+        if (point.gameObject.tag != "Player")
+        {
+            Con = true;
+        }
+        target = point;
+    }
+    void tui(GameObject other)
+    {
+        Debug.Log(other);
+        if (lasttarget != null)
+        {
+            if (lasttarget.gameObject.tag == "rescue" && other != lasttarget)
+                b.Add(other);
+            other.gameObject.SendMessage("nowtuiju", this.gameObject, SendMessageOptions.DontRequireReceiver);
+        }
+    }
+    void me(GameObject other)
+    {
+        if (lasttarget == null)
+        {
+            lasttarget = other;
+        }
+        Debug.Log(lasttarget);
+    }
+    //受け取り場所についたら
+    void lastnull(){
+    lasttarget = null;
+    }
+    //listに前誘導された誘導員がいた場合受け渡し場所にいる高齢者数をマイナス
+    void reslist(GameObject las)
+    {
+        if (guide.Contains(las))
+        {
+            targetx.gameObject.SendMessage("rescuepointcountloss", SendMessageOptions.DontRequireReceiver);
         }
     }
 }

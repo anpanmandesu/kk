@@ -6,13 +6,14 @@ public class yuudoufollow : MonoBehaviour
 {
     
     [Header("Steering")]
-    public float speed = 2f;
+    private float speed = 1f;//現在の速度
+    private float fullspeed = 1f;//速度の最大値
     public float stoppingDistance = 0; 
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
-    float kakudo = -90f;
     public bool force = true;
     int j = 0; //corner���ǂ邽�ё�����
     int k = 0;//poligon�ƂԂ�������
+    private bool xxx = false;//trueになるまで受け渡し場所から動けない
 
     private Rigidbody2D rb;//��]��rb
 
@@ -28,15 +29,17 @@ public class yuudoufollow : MonoBehaviour
     //�q����󂯎��Q�[���I�u�W�F�N�g
     public GameObject kyuujosha = null;
     public Transform[] waypoints;
-    List<string> rescue = new List<string>();//���܂łɏ������G�[�W�F���g�̃��X�g
-    List<string> nowrescue = new List<string>();//現在救助中の高齢者
+    List<GameObject> rescue = new List<GameObject>();//���܂łɏ������G�[�W�F���g�̃��X�g
+    List<GameObject> nowrescue = new List<GameObject>();//現在救助中の高齢者
 
     private bool kyuujo = false;
 
+
     LineRenderer line;//�ǉz���̃G�[�W�F���g����������
+    private CircleCollider2D circleCollider;
 
     //受け取り場所
-    [SerializeField] Transform receivepoint;
+    [SerializeField] GameObject receivepoint;
 
 
     Vector3 lastPos;
@@ -51,7 +54,10 @@ public class yuudoufollow : MonoBehaviour
     //ランダム歩行しているか
     bool randomwalk = true;
 
-
+    public GameObject nextrescue;//次のエリアの誘導エージェント
+    public GameObject lastrescue;//前のエリアの誘導エージェント
+    public GameObject lastrecevepoint;//前のエリアのゲームオブジェクト
+    private int rescount = 0;//前受け取り場所にいる高齢者の数
 
     void Start()
     {
@@ -67,30 +73,11 @@ public class yuudoufollow : MonoBehaviour
 
         lastPos = transform.position;
 
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
         //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
-        while (ObstacleHit)
-        {
-
-            //Debug.Log(speed);
-            navMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshAgent.speed = speed;
-            SetRandomDestination();
-            // 半径内のすべてのCollider2Dを検出
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
-
-            ObstacleHit = false;
-            // 各Collider2Dに対して処理
-            foreach (Collider2D collider in colliders)
-            {
-                // タグが指定した障害物のタグと一致するか確認
-                if (collider.CompareTag("obstacle") || collider.CompareTag("Player"))
-                {
-                    //Debug.Log("yaaaa");
-                    ObstacleHit = true;
-                    break; // 障害物が一つでも検出されたらループを抜ける
-                }
-            }
-        }
+        SetRandommain();
+        circleCollider = GetComponent<CircleCollider2D>();
     }
 void Update()
     {
@@ -116,6 +103,9 @@ void Update()
         //Debug.Log(k);
 
             Trace(transform.position, AgentDestination);
+        
+
+
         ///<summary>�ȉ���]</summary>
 
         Vector2 velocity =(Vector2) (transform.position - lastPos);
@@ -140,47 +130,40 @@ void Update()
         //三人以上救助してたら
         if (nowrescue.Count == 3)
         {
-            AgentDestination = receivepoint.position;
+            AgentDestination = receivepoint.transform.position;
         }
 
             if (randomwalk == true)
             {
                 // 目的地に到達したら新しいランダムな目的地を設定
                 float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
-           
+                
                 if (distanceToTarget < 0.5f)
                 {
-                    if(AgentDestination == receivepoint.position)
-                    {
-                        nowrescue.Clear();
-                    }
-
-                        ObstacleHit = true;
-                        //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
-                        while (ObstacleHit)
-                        {
-                            SetRandomDestination();
-                            // 半径内のすべてのCollider2Dを検出
-                            Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
-
-                            ObstacleHit = false;
-                            // 各Collider2Dに対して処理
-                            foreach (Collider2D collider in colliders)
-                            {
-                                // タグが指定した障害物のタグと一致するか確認
-                                if (collider.CompareTag("obstacle"))
-                                {
-                                    Debug.Log("yaaaa");
-                                    ObstacleHit = true;
-                                    break; // 障害物が一つでも検出されたらループを抜ける
-                                }
-                            }
-                        }
+                    SetRandommain();
                     
                 }
             }
 
-           
+        //出口までと前の受け渡し場所がどちらが近いかと3人以上いたら
+        if (nowrescue.Count != 3)
+        {
+            if (rescount >= 3)
+            {
+                // パスの長さを取得
+                float pathLengthToTarget1 = GetPathLength(receivepoint.transform.position);
+                float pathLengthToTarget2 = GetPathLength(lastrecevepoint.transform.position);
+                // より近い方のターゲットを表示
+                if (pathLengthToTarget1 < pathLengthToTarget2)
+                {
+                    AgentDestination = receivepoint.transform.position;
+                }
+                else
+                {
+                    AgentDestination = lastrecevepoint.transform.position;
+                }
+            }
+        }
     }
     private void Trace(Vector2 current, Vector2 target)
     {
@@ -221,48 +204,87 @@ void Update()
             Destroy(this.gameObject);
             isTouched = false;
         }
-         if(other.gameObject == kyuujosha)
+        // 衝突したオブジェクトにのみメッセージを送信
+        if (other.gameObject.tag == "Finish")
         {
-            nowrescue.Add(kyuujosha.name);
+            if (kyuujosha != null)
+            {
+                other.gameObject.SendMessage("OnCollisionOccurred", kyuujosha == other.gameObject, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+        
+        
+    }
+
+    void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject == kyuujosha)
+        {
+            //高齢者に前のエリアの誘導員情報をわたし、今までに助けられたリストにあった場合,下のrescuepointcountloss()でcountを減らす
+            other.gameObject.SendMessage("reslist", lastrescue, SendMessageOptions.DontRequireReceiver);
+            nowrescue.Add(kyuujosha);
             kyuujo = false;
             kyuujosha = null;
             randomwalk = true;
+            //高齢者を運んでいるときは速度が変更される（一人につき時速-1km)
+            speed -= fullspeed / 6;
+            Debug.Log(speed);
+            navMeshAgent.speed = speed;
+
+        }
+    }
+    //受け取り場所に誘導員がついたら、高齢者を中心に移動させるよう情報を受け渡す
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Confluence") 
+        {
+            
+            for (int i = 0; i < nowrescue.Count; i++)
+            {
+                //次のエリアの誘導員に受け取り場所に高齢者を渡すたび呼びだす
+                nextrescue.gameObject.SendMessage("rescuepointcount", SendMessageOptions.DontRequireReceiver);
+                nowrescue[i].gameObject.SendMessage("ReceiveCollision", receivepoint, SendMessageOptions.DontRequireReceiver);
+            }
+            //待機
+            navMeshAgent.speed = 0f;
+            //高齢者エージェントから受け取るまで待機
+                StartCoroutine(MyCoroutine());
+                circleCollider.isTrigger = true;
+            //速度を戻す
             
         }
     }
-    void OnCollisionStay2D(Collision2D other)
-    {
-        
-    }
+
     //�q����̏����󂯎�郁�\�b�h
     public void hantei(GameObject otherObject)
     {
-
-    
-        //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
-        if (kyuujosha == null)
-        // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
-            if (rescue.Contains(otherObject.name))
-            {
-                kyuujosha = null;
+        //このifがないとtargetが受け取り口になっていても、途中で視界に入ったら3以上でもkyuujoshaとして受け入れてしまう 
+        if (nowrescue.Count <= 2) {
+            //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
+            if (kyuujosha == null)
+                // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
+                if (!rescue.Contains(otherObject))
+                {
+                    if (!rescue.Contains(otherObject))
+                    {
+                        otherObject.gameObject.SendMessage("me", this.gameObject, SendMessageOptions.DontRequireReceiver);
+                        kyuujosha = otherObject;
+                        //���̒n�_�Ɍ��������߂�99
+                        kyuujo = true;
+                        Debug.Log("b");
+                        rescue.Add(otherObject);// ���܂łɏ������G�[�W�F���g�̃��X�g�ɒǉ�
+                        AgentDestination = kyuujosha.transform.position;
+                    }
+                }
             }
-            else
-            {
-                kyuujosha = otherObject;
-                //���̒n�_�Ɍ��������߂�99
-                kyuujo = true;
-                Debug.Log("b");
-                rescue.Add(otherObject.name);// ���܂łɏ������G�[�W�F���g�̃��X�g�ɒǉ�
-                AgentDestination = kyuujosha.transform.position;
-            }
-        }
+       }
 
     //ランダムな目的地設定
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
         float randomX = Random.Range(-8.66f, 21f);
-        float randomY = Random.Range(-15f, receivepoint.position.y);
+        float randomY = Random.Range(-15f, receivepoint.transform.position.y);
         /*Debug.Log(randomX);
         Debug.Log(randomY);*/
         AgentDestination = new Vector3(randomX, randomY, 0.0f);
@@ -270,9 +292,95 @@ void Update()
     //受け取り場所が近ければそちらに向かう(現在救助者が1人以上)
     public void pointhantei()
     {
-        if(nowrescue.Count >= 1){
-            AgentDestination = receivepoint.position;
+        if(nowrescue.Count >= 1 && !kyuujo){
+            AgentDestination = receivepoint.transform.position;
         }
+    }
+
+    //ランダムな目的地設定main(障害物がそこにないか)
+    void SetRandommain()
+    {
+        ObstacleHit = true;
+        //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+        while (ObstacleHit)
+        {
+            SetRandomDestination();
+            // 半径内のすべてのCollider2Dを検出
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(AgentDestination, castRadius);
+
+            ObstacleHit = false;
+            // 各Collider2Dに対して処理
+            foreach (Collider2D collider in colliders)
+            {
+                // タグが指定した障害物のタグと一致するか確認
+                if (collider.CompareTag("obstacle"))
+                {
+                    Debug.Log("yaaaa");
+                    ObstacleHit = true;
+                    break; // 障害物が一つでも検出されたらループを抜ける
+                }
+            }
+        }
+    }
+    //ループ
+    private System.Collections.IEnumerator MyCoroutine()
+    {
+
+        // コルーチンの処理
+        while (!xxx)
+        {
+            yield return null; // 1フレーム待機
+        }
+        circleCollider.isTrigger = false;
+        speed = fullspeed;
+        navMeshAgent.speed = speed;
+        nowrescue.Clear();
+        SetRandommain();
+        xxx = false;
+
+    }
+    //高齢者エージェントから受け取る
+    void senior()
+    {
+        xxx = true;
+    }
+    //今まで助けたリストに入れる
+    void nowtuiju(GameObject other)
+    {
+        rescue.Add(other);
+        Debug.Log(other);
+    }
+    //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）
+    void guideclear(GameObject other)
+    {
+        rescue.RemoveAll(obj => obj == other);
+    }
+    //前受け取り場所にいる高齢者の人数
+    void rescuepointcount()
+    {
+        rescount++;
+    }
+    //高齢者リストに前の誘導員がいた場合
+    void rescuepointcountloss()
+    {
+        rescount--;
+    }
+
+    //このオブジェクトと引数のオブジェクトの間の総距離
+    float GetPathLength(Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path);
+
+        float pathLength = 0f;
+
+        // パス上の各点の間の距離を累積
+        for (int i = 0; i < path.corners.Length - 1; i++)
+        {
+            pathLength += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+        }
+
+        return pathLength;
     }
 }
 

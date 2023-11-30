@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class golehantei : MonoBehaviour
 {
-    public float viewRadius = 10f;        // 視野の半径
+    public float viewRadius = 100f;        // 視野の半径
     public float viewAngle = 40f;        // 視野の角度(左右にはそれぞれviewAngle/2)
     public GameObject kyuujo;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
@@ -43,27 +43,64 @@ public class golehantei : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
-            DetectCollidersInFieldOfView(other.gameObject);
-            
+
+            bool De = DetectCollidersInFieldOfView(other.gameObject);
+            if (De == true)
+            {
+                bool Ob = ObstacleBetween(transform.position, other.transform.position, other.gameObject);
+                if (Ob == false)
+                {
+                    transform.parent.GetComponent<NavMeshAgent2D>().hantei(other.gameObject);
+                }
+            }
         }
 
-    }   
+    }
     //範囲（viewAngle度)の中にあるオブジェクトだけ検知
-    void DetectCollidersInFieldOfView(GameObject otherObject)
+    bool DetectCollidersInFieldOfView(GameObject otherObject)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, viewRadius);
 
         foreach (Collider2D collider in colliders)
         {
+            Vector2 customDirection = Quaternion.Euler(0, 0, 270f) * transform.up;
             Vector2 dirToCollider = (collider.transform.position - transform.position).normalized;
-            float angleToCollider = Vector2.Angle(transform.up, dirToCollider);
+            float angleToCollider = Vector2.Angle(customDirection, dirToCollider);
 
+            //Debug.Log(transform.up);
             // 視野角度内のColliderだけを検知
-            if (angleToCollider < viewAngle * 0.5f&&collider.name == otherObject.gameObject.name)
+            if (angleToCollider < viewAngle * 0.5f && collider.name == otherObject.gameObject.name)
             {
-                transform.parent.GetComponent<NavMeshAgent2D>().hantei(otherObject);
+
                 isTouched = false;
+                return true;
             }
         }
+        return false;
+    }
+
+    //現在位置から検知したオブジェクトの間に障害物があるかどうか
+    bool ObstacleBetween(Vector2 start, Vector2 target, GameObject otherObject)
+    {
+        Vector2 rayDirection = otherObject.transform.position - transform.position;
+        float rayDistance = rayDirection.magnitude;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, rayDirection, rayDistance);
+        //int i = 1;
+        // hitsをループして処理
+        foreach (RaycastHit2D hit in hits)//rayにはOnTriggerStay2Dのオブジェクトは検知されない
+        {
+            //Debug.Log(i);
+            //Debug.Log(hit.collider);
+            // 当たったColliderが検知したオブジェクトでない場合
+            if (hit.collider != null)
+            {
+                if (hit.collider.CompareTag("Agent")&& !otherObject == transform.root.gameObject || hit.collider.CompareTag("rescue") || hit.collider.CompareTag("GameController") || hit.collider.CompareTag("obstacle") )
+                {
+                    return true;
+                }
+            }
+            //i++;
+        }
+        return false;
     }
 }
