@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8503991714600545110}
   - component: {fileID: 2483401318365284685}
   - component: {fileID: 4468784550417689826}
+  - component: {fileID: 7395721098725279408}
   m_Layer: 6
   m_Name: selfgole
   m_TagString: siya
@@ -65,6 +66,27 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 4.31
+--- !u!50 &7395721098725279408
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746717210946534470}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7933688930959607594
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,6 +98,7 @@ GameObject:
   - component: {fileID: 7933688930959607595}
   - component: {fileID: 7933688930959607596}
   - component: {fileID: 8490649727929878658}
+  - component: {fileID: 8922300496856593214}
   m_Layer: 6
   m_Name: yuudougole
   m_TagString: siya
@@ -128,6 +151,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kyuujo: {fileID: 0}
   isTouched: 0
+--- !u!50 &8922300496856593214
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933688930959607594}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7933688931101437487
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +287,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7933688931101437487}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -314,6 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
+  rescuespeed: 0.41666666
   stoppingDistance: 0
   isTouched: 0
   force: 1
@@ -333,6 +378,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   wallAvoidanceForce: 5
+  R: 0
 --- !u!195 &7933688931101437498
 NavMeshAgent:
   m_ObjectHideFlags: 0

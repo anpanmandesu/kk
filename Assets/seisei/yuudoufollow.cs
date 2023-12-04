@@ -6,8 +6,8 @@ public class yuudoufollow : MonoBehaviour
 {
     
     [Header("Steering")]
-    private float speed = 1f;//現在の速度
-    private float fullspeed = 1f;//速度の最大値
+    private float speed = 0.5f;//現在の速度
+    private float fullspeed = 0.5f;//速度の最大値
     public float stoppingDistance = 0; 
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     public bool force = true;
@@ -58,6 +58,7 @@ public class yuudoufollow : MonoBehaviour
     public GameObject lastrescue;//前のエリアの誘導エージェント
     public GameObject lastrecevepoint;//前のエリアのゲームオブジェクト
     private int rescount = 0;//前受け取り場所にいる高齢者の数
+    private GameObject child;//前受け渡し場所に来たら範囲内全体を判定するためにメッセージを送る子オブジェクト
 
     void Start()
     {
@@ -78,6 +79,7 @@ public class yuudoufollow : MonoBehaviour
         //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
         SetRandommain();
         circleCollider = GetComponent<CircleCollider2D>();
+        child = transform.Find("recevepointhantei").gameObject;
     }
 void Update()
     {
@@ -102,7 +104,7 @@ void Update()
 
         //Debug.Log(k);
 
-            Trace(transform.position, AgentDestination);
+            
         
 
 
@@ -148,22 +150,28 @@ void Update()
         //出口までと前の受け渡し場所がどちらが近いかと3人以上いたら
         if (nowrescue.Count != 3)
         {
-            if (rescount >= 3)
+            if (kyuujosha == null)
             {
-                // パスの長さを取得
-                float pathLengthToTarget1 = GetPathLength(receivepoint.transform.position);
-                float pathLengthToTarget2 = GetPathLength(lastrecevepoint.transform.position);
-                // より近い方のターゲットを表示
-                if (pathLengthToTarget1 < pathLengthToTarget2)
+                if (rescount >= 3)
                 {
-                    AgentDestination = receivepoint.transform.position;
-                }
-                else
-                {
-                    AgentDestination = lastrecevepoint.transform.position;
+                    // パスの長さを取得
+                    float pathLengthToTarget1 = GetPathLength(receivepoint.transform.position);
+                    float pathLengthToTarget2 = GetPathLength(lastrecevepoint.transform.position);
+                    // より近い方のターゲットを表示&&今引き連れている高齢者が0でなければ
+                    if (pathLengthToTarget1 < pathLengthToTarget2 && nowrescue.Count != 0)
+                    {
+                        Debug.Log("E");
+                        AgentDestination = receivepoint.transform.position;
+                    }
+                    else
+                    {
+                        Debug.Log("F");
+                        AgentDestination = lastrecevepoint.transform.position;
+                    }
                 }
             }
         }
+        Trace(transform.position, AgentDestination);
     }
     private void Trace(Vector2 current, Vector2 target)
     {
@@ -207,12 +215,11 @@ void Update()
         // 衝突したオブジェクトにのみメッセージを送信
         if (other.gameObject.tag == "Finish")
         {
-            if (kyuujosha != null)
+            if (kyuujosha == other.gameObject)
             {
-                other.gameObject.SendMessage("OnCollisionOccurred", kyuujosha == other.gameObject, SendMessageOptions.DontRequireReceiver);
+                other.gameObject.SendMessage("OnCollisionOccurred", this.gameObject, SendMessageOptions.DontRequireReceiver);
             }
         }
-        
         
     }
 
@@ -253,6 +260,17 @@ void Update()
             //速度を戻す
             
         }
+
+        //前の受け渡し場所にいるときは子オブジェクト(recevepointhantei.cs)にメッセージを送る
+        if (lastrecevepoint != null && other.gameObject == lastrecevepoint)
+        {
+            child.gameObject.SendMessage("receveEnter", SendMessageOptions.DontRequireReceiver);
+        }
+    }
+    //前の受け渡し場所から出たとき、子オブジェクトにメッセージを送る
+    void OnTriggerExit2D(Collider2D other)
+    {
+        child.gameObject.SendMessage("receveExit", SendMessageOptions.DontRequireReceiver);
     }
 
     //�q����̏����󂯎�郁�\�b�h
@@ -262,12 +280,13 @@ void Update()
         if (nowrescue.Count <= 2) {
             //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
             if (kyuujosha == null)
+            {
                 // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
                 if (!rescue.Contains(otherObject))
                 {
+                    otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
                     if (!rescue.Contains(otherObject))
                     {
-                        otherObject.gameObject.SendMessage("me", this.gameObject, SendMessageOptions.DontRequireReceiver);
                         kyuujosha = otherObject;
                         //���̒n�_�Ɍ��������߂�99
                         kyuujo = true;
@@ -276,6 +295,7 @@ void Update()
                         AgentDestination = kyuujosha.transform.position;
                     }
                 }
+            }
             }
        }
 

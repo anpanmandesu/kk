@@ -41,7 +41,7 @@ public class golehantei : MonoBehaviour
         }
 
 
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Finish")
         {
 
             bool De = DetectCollidersInFieldOfView(other.gameObject);
@@ -54,6 +54,7 @@ public class golehantei : MonoBehaviour
                 }
             }
         }
+        
 
     }
     //範囲（viewAngle度)の中にあるオブジェクトだけ検知

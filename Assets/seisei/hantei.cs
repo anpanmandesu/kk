@@ -9,8 +9,6 @@ public class hantei : MonoBehaviour
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
     private LayerMask ignoreLayer;
-    private bool nottuiju = true;
-    
     
     void Start()
     {
@@ -20,8 +18,6 @@ public class hantei : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(nottuiju);
-        nottuiju = true;
         
        //DetectVisibleObjects(); //視野角をスクリプトで制御
     }
@@ -54,14 +50,9 @@ public class hantei : MonoBehaviour
                 bool Ob = ObstacleBetween(transform.position, other.transform.position, other.gameObject);
                 if (Ob == false)
                 {
-                    //gameObject.transform.root.gameObjectだとbutaiを持ってきてしまう
-                    other.gameObject.SendMessage("tui", gameObject.transform.parent.gameObject, SendMessageOptions.DontRequireReceiver);
-                    if (nottuiju)
-                    {
                         transform.parent.GetComponent<yuudoufollow>().hantei(other.gameObject);
 
                         isTouched = false;
-                        }
                     }
                 }
             }

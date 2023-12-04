@@ -6,6 +6,8 @@ public class tuiju : MonoBehaviour
 {
     public GameObject target;
     private GameObject lasttarget = null;//今助けに来ている誘導員
+    private float speedx = 3.0f;//追跡中の速度
+    private float acceleration = 0.02f;//減速加速度（追跡中の速度に沿って大きくなる）
     private GameObject targetx;//
     private GameObject a;//直前に助けてた
     List<GameObject> b = new List<GameObject>();//以前に助けないでと送信したことがある誘導員
@@ -18,25 +20,18 @@ public class tuiju : MonoBehaviour
     private bool Con = false;//受け取り場所についたら誘導員からtrueを受け取る
     private GameObject receivepoint;
 
-    void start()
+    void Start()
     {
+
     }
     void Update()
     {
         
-        if (active == false)
-        {
-            //速度がTime.deltaTimeを使わないとバグる
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);//誘導員に邪魔にならない速度
-        }
-        else
-        {
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, receivespeed);
-        }
+        
         //受け取り場所の近くに来たら中心に動くようにする
         if (Con)
         {
-            receivespeed -= 0.01f * Time.deltaTime;
+            receivespeed -= acceleration * Time.deltaTime;
         }
         if (receivespeed < 0)
         {
@@ -51,13 +46,21 @@ public class tuiju : MonoBehaviour
             }
         }
         targetx = FindNearestObject();
+        if (active == false)
+        {
+            //速度がTime.deltaTimeを使わないとバグる
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);//誘導員に邪魔にならない速度
+        }
+        else
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, receivespeed);
+        }
     }
 ///<summary>ぶつかったら消える</summary>
 void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
         {
-            a.gameObject.SendMessage("senior", SendMessageOptions.DontRequireReceiver);
             Destroy(this.gameObject);
             isTouched = false;
         }
@@ -66,19 +69,19 @@ void OnCollisionEnter2D(Collision2D other)
     {
         
     }
-    void OnCollisionOccurred(bool u)
+    void OnCollisionOccurred(GameObject other)
     {
-        if (u)
-        {
             //今までに助けられていない誘導員かつ現在追跡していないかどうか
-            if (/*other.gameObject != target &&*/ !guide.Contains(targetx))
+            if (/*other.gameObject != target &&*/ !guide.Contains(other))
             {
-                target = targetx;
-                a = targetx;
+                target = other;
+                a = other;
+            guide.Add(other);
             }         
-            receivespeed = 1.5f * Time.deltaTime;
+            receivespeed = speedx * Time.deltaTime;
             active = true;
-        }
+        //一般エージェントに追跡
+        
     }
 
     //一番近い誘導員を出す
@@ -115,18 +118,14 @@ void OnCollisionEnter2D(Collision2D other)
         Debug.Log(other);
         if (lasttarget != null)
         {
-            if (lasttarget.gameObject.tag == "rescue" && other != lasttarget)
+            if (other != lasttarget)
                 b.Add(other);
             other.gameObject.SendMessage("nowtuiju", this.gameObject, SendMessageOptions.DontRequireReceiver);
         }
-    }
-    void me(GameObject other)
-    {
-        if (lasttarget == null)
+        else
         {
             lasttarget = other;
         }
-        Debug.Log(lasttarget);
     }
     //受け取り場所についたら
     void lastnull(){
@@ -139,5 +138,10 @@ void OnCollisionEnter2D(Collision2D other)
         {
             targetx.gameObject.SendMessage("rescuepointcountloss", SendMessageOptions.DontRequireReceiver);
         }
+    }
+    //一般エージェントが出口に到着したら目的地を一時的に出口にする
+    void gole(GameObject other)
+    {
+        target = other;
     }
 }

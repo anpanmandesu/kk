@@ -6,6 +6,7 @@ public class NavMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
     public float speed;
+    public float rescuespeed = (1f - 1f/6)/2;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
@@ -45,7 +46,7 @@ public class NavMeshAgent2D : MonoBehaviour
     public LayerMask agentLayer;
 
     public float wallAvoidanceForce = 5.0f;
-    private Vector2 AgentForce = new Vector2(0f,0f);
+    private Vector2 AgentForce = new Vector2(0f, 0f);
 
 
     Vector3 randomPoint = Vector3.zero;
@@ -57,9 +58,19 @@ public class NavMeshAgent2D : MonoBehaviour
 
     //ランダム歩行しているか
     bool randomwalk = true;
+    public bool R; //このエージェントが救助するか。するならtrue(10%)
+    bool s = false;//現在高齢者を救助中ならtrue
+    //
+    private GameObject sinior = null;//助ける高齢者を格納
+    private List<GameObject> rescue = new List<GameObject>();//追跡できないエージェント
+    private GameObject goleobj;//出口
+    //前までの目的地
+    private Vector3 lasttarget;
     void Start()
     {
-        speed = Random.Range(0.5f, 3f);
+        Debug.Log(rescuespeed);
+        R  = (1 == Random.Range(1,11));
+        speed = Random.Range(0.25f, 1.5f);
         //Debug.Log(speed);
 
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -111,7 +122,7 @@ public class NavMeshAgent2D : MonoBehaviour
     {
         // 回転をゼロに設定
         transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
-        
+
 
         AgentForce = Vector2.zero;//リセット
         /*//エージェント同士の衝突回避
@@ -136,45 +147,45 @@ public class NavMeshAgent2D : MonoBehaviour
 
         // 一定の範囲内にいるエージェントを取得
         Collider2D[] nearbyAgents = Physics2D.OverlapCircleAll(transform.position, avoidanceRadius, agentLayer);
-/*
-        foreach (var agentCollider in nearbyAgents)
-        {
-            if (agentCollider.gameObject != gameObject)
-            {
-                // エージェント同士の方向ベクトル
-                Vector2 toAgent = agentCollider.transform.position - transform.position;
+        /*
+                foreach (var agentCollider in nearbyAgents)
+                {
+                    if (agentCollider.gameObject != gameObject)
+                    {
+                        // エージェント同士の方向ベクトル
+                        Vector2 toAgent = agentCollider.transform.position - transform.position;
 
-                // エージェント同士の距離
-                float distance = toAgent.magnitude;
+                        // エージェント同士の距離
+                        float distance = toAgent.magnitude;
 
-                // エージェント同士の半径の合計
-                float radiusSum = castRadius*2;
+                        // エージェント同士の半径の合計
+                        float radiusSum = castRadius*2;
 
-                // エージェント同士の単位ベクトル
-                Vector2 normalizedDirection = toAgent.normalized;
+                        // エージェント同士の単位ベクトル
+                        Vector2 normalizedDirection = toAgent.normalized;
 
-                // エージェント同士の速度差
-                Vector2 velocityDifference = agentCollider.GetComponent<Rigidbody2D>().velocity - rb.velocity;
+                        // エージェント同士の速度差
+                        Vector2 velocityDifference = agentCollider.GetComponent<Rigidbody2D>().velocity - rb.velocity;
 
-                // エージェント同士の中心を結んだ線に対して垂直な単位ベクトル
-                Vector2 tangentVector = new Vector2(-normalizedDirection.y, normalizedDirection.x);
+                        // エージェント同士の中心を結んだ線に対して垂直な単位ベクトル
+                        Vector2 tangentVector = new Vector2(-normalizedDirection.y, normalizedDirection.x);
 
-                // 力の計算
-                float forceMagnitude = A * Mathf.Exp((distance - radiusSum) / B) +
-                                       gamma * Mathf.Max(0, distance - radiusSum) +
-                                       kappa * Mathf.Max(0, distance - radiusSum) * Vector2.Dot(velocityDifference, tangentVector);
-                
-                AgentForce += forceMagnitude * normalizedDirection;
-            }
-            *//*// エージェントの速度を更新する
-            Vector2 acceleration = AgentForce / rb.mass;
-            rb.velocity += acceleration * Time.deltaTime;*//*
-        }*/
-            ///<summary>以下回転</summary>
+                        // 力の計算
+                        float forceMagnitude = A * Mathf.Exp((distance - radiusSum) / B) +
+                                               gamma * Mathf.Max(0, distance - radiusSum) +
+                                               kappa * Mathf.Max(0, distance - radiusSum) * Vector2.Dot(velocityDifference, tangentVector);
+
+                        AgentForce += forceMagnitude * normalizedDirection;
+                    }
+                    *//*// エージェントの速度を更新する
+                    Vector2 acceleration = AgentForce / rb.mass;
+                    rb.velocity += acceleration * Time.deltaTime;*//*
+                }*/
+        ///<summary>以下回転</summary>
 
 
 
-            //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
+        //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
         //     if (velocity != Vector2.zero)
         // {
         //     Debug.Log("C");
@@ -185,7 +196,8 @@ public class NavMeshAgent2D : MonoBehaviour
         //     /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
         // }
 
-        if(randomwalk == true){
+        if (randomwalk == true)
+        {
             // 目的地に到達したら新しいランダムな目的地を設定
             float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
             if (distanceToTarget < 0.5f)
@@ -213,14 +225,16 @@ public class NavMeshAgent2D : MonoBehaviour
                 }
             }
         }
-        //出口を見つけて、目的地を出口にした場合
-        else{
-            AgentDestination = target.position;
+        //高齢者を救助中
+        if (s)
+        {
+            AgentDestination = sinior.transform.position;
         }
-        Trace(transform.position, AgentDestination);
+
+        
 
         ///<summary>�ȉ���]</summary>
-    Vector2 velocity =(Vector2) (transform.position - lastPos);
+        Vector2 velocity = (Vector2)(transform.position - lastPos);
         lastPos = transform.position;
 
         //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
@@ -233,6 +247,8 @@ public class NavMeshAgent2D : MonoBehaviour
             // �I�u�W�F�N�g����]
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
+
+        Trace(transform.position, AgentDestination);
     }
 
     void FixedUpdate()
@@ -272,7 +288,7 @@ public class NavMeshAgent2D : MonoBehaviour
         //     Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
 
         // }
-        
+
 
 
 
@@ -340,13 +356,33 @@ public class NavMeshAgent2D : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            if(sinior != null)
+            {
+                sinior.gameObject.SendMessage("gole",goleobj , SendMessageOptions.DontRequireReceiver);
+            }
             Destroy(this.gameObject);
             isTouched = false;
+        }
+        // 衝突したオブジェクトにのみメッセージを送信
+        if (other.gameObject.tag == "Finish")
+        {
+            if (sinior == other.gameObject)
+            {
+                other.gameObject.SendMessage("OnCollisionOccurred", this.gameObject, SendMessageOptions.DontRequireReceiver);
+                navMeshAgent.speed = rescuespeed;
+            }
         }
     }
     void OnCollisionStay2D(Collision2D other)
     {
-
+        if (sinior != null)
+        {
+            if (other.gameObject == sinior && s)
+            {
+                AgentDestination = lasttarget;
+                s = false;
+            }
+        }
     }
     //ランダムな目的地設定
     void SetRandomDestination()
@@ -398,26 +434,40 @@ public class NavMeshAgent2D : MonoBehaviour
 
     public void hantei(GameObject otherObject)
     {
-        randomwalk = false;
-        target = otherObject.transform;
-        }
-    //誘導員を見つけた際、近くの出口が目的地になる
-    public void golehantei(){
-        randomwalk = false;
-        target = FindNearestObjectWithTag("Player");
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-
-    float minDistance = Mathf.Infinity;
-    foreach (Vector3 corner in path.corners)
+        if (otherObject.tag == "Finish" && R){
+            if (sinior == null)
             {
-                float distance = Vector3.Distance(transform.position, corner);
-                if (distance < minDistance)
+                otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
+                if (!rescue.Contains(otherObject))
                 {
-                    minDistance = distance;
+                    lasttarget = AgentDestination;
+                    sinior = otherObject;
+                    s = true;
                 }
             }
-            //Debug.Log("Nearest distance: " + minDistance);
+        }
+        if (otherObject.tag == "Player")
+        {
+            randomwalk = false;
+            lasttarget = otherObject.transform.position;
+            goleobj = otherObject;
+            if (!s)
+            {
+                AgentDestination = otherObject.transform.position;
+            }
+
+        }
+        
+    }
+    //誘導員を見つけた際、近くの出口が目的地になる
+    public void golehantei()
+    {
+        randomwalk = false;
+        lasttarget = FindNearestObjectWithTag("Player").position;
+        if (!s)
+        {
+            AgentDestination = lasttarget;
+        }
     }
 
     Transform FindNearestObjectWithTag(string tag)
@@ -434,9 +484,19 @@ public class NavMeshAgent2D : MonoBehaviour
             {
                 minDistance = distance;
                 nearestObject = obj.transform;
+                goleobj = obj;
             }
         }
 
         return nearestObject;
+    }
+    //追跡エージェントがいたらリストに追加
+    void nowtuiju (GameObject other){
+        rescue.Add(other);
+    }
+    //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）
+    void guideclear(GameObject other)
+    {
+        rescue.RemoveAll(obj => obj == other);
     }
 }
