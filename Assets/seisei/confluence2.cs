@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class confluence2 : MonoBehaviour
 {
-    public float viewRadius = 5f; //視野半径(現在インスペクターで変更できる)
+    public float viewRadius = 100f; //視野半径(現在インスペクターで変更できる)
     public float viewAngle = 60f;// 視野の角度(左右にはそれぞれviewAngle/2)
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update

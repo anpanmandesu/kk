@@ -6,6 +6,7 @@ public class goleyuudou : MonoBehaviour
 {
     private int count = 0;
     // Start is called before the first frame update
+    public GameObject gole;
     void Start()
     {
 
@@ -17,7 +18,7 @@ public class goleyuudou : MonoBehaviour
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject == gole)
         {
             transform.parent.GetComponent<yuudoufollow2>().listcount();
             if (count >= 1)

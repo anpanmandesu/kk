@@ -6,9 +6,8 @@ public class yuudoufollow : MonoBehaviour
 {
     
     [Header("Steering")]
-    private float speed = 0.5f;//現在の速度
-    private float fullspeed = 0.5f;//速度の最大値
-    public float stoppingDistance = 0; 
+    private float speed = 6f;//現在の速度
+    private float fullspeed = 6f;//速度の最大値
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     public bool force = true;
     int j = 0; //corner���ǂ邽�ё�����
@@ -59,12 +58,16 @@ public class yuudoufollow : MonoBehaviour
     public GameObject lastrecevepoint;//前のエリアのゲームオブジェクト
     private int rescount = 0;//前受け取り場所にいる高齢者の数
     private GameObject child;//前受け渡し場所に来たら範囲内全体を判定するためにメッセージを送る子オブジェクト
+    public float areaxm;//エリアのxの上限
+    public float areaxs;//エリアのxの下限
+    public float areaym;//エリアのyの上限
+    public float areays;//エリアのyの下限
 
     void Start()
     {
-        NavMeshPath path = new NavMeshPath();
+/*        NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-        Pathcorners = path.corners;
+        Pathcorners = path.corners;*/
 
         //�ړ��J�n
         //MoveToWaypoint(waypoints[k]);
@@ -83,6 +86,7 @@ public class yuudoufollow : MonoBehaviour
     }
 void Update()
     {
+       
             // 回転をゼロに設定
             transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
             AgentForce = Vector2.zero;//リセット
@@ -135,7 +139,7 @@ void Update()
             AgentDestination = receivepoint.transform.position;
         }
 
-            if (randomwalk == true)
+            if (randomwalk == true && kyuujosha == null)
             {
                 // 目的地に到達したら新しいランダムな目的地を設定
                 float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
@@ -175,6 +179,7 @@ void Update()
     }
     private void Trace(Vector2 current, Vector2 target)
     {
+        navMeshAgent.speed = speed;
             navMeshAgent.SetDestination(target);
             /*if (Vector2.Distance(current, target) <= stoppingDistance)
             {
@@ -276,17 +281,21 @@ void Update()
     //�q����̏����󂯎�郁�\�b�h
     public void hantei(GameObject otherObject)
     {
+
         //このifがないとtargetが受け取り口になっていても、途中で視界に入ったら3以上でもkyuujoshaとして受け入れてしまう 
         if (nowrescue.Count <= 2) {
             //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
             if (kyuujosha == null)
             {
+                Debug.Log("B");
                 // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
                 if (!rescue.Contains(otherObject))
                 {
+                    Debug.Log("C");
                     otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
                     if (!rescue.Contains(otherObject))
                     {
+                        Debug.Log("D");
                         kyuujosha = otherObject;
                         //���̒n�_�Ɍ��������߂�99
                         kyuujo = true;
@@ -303,8 +312,8 @@ void Update()
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
-        float randomX = Random.Range(-8.66f, 21f);
-        float randomY = Random.Range(-15f, receivepoint.transform.position.y);
+        float randomX = Random.Range(areaxs, areaxm);
+        float randomY = Random.Range(areays, areaym);
         /*Debug.Log(randomX);
         Debug.Log(randomY);*/
         AgentDestination = new Vector3(randomX, randomY, 0.0f);
@@ -335,7 +344,6 @@ void Update()
                 // タグが指定した障害物のタグと一致するか確認
                 if (collider.CompareTag("obstacle"))
                 {
-                    Debug.Log("yaaaa");
                     ObstacleHit = true;
                     break; // 障害物が一つでも検出されたらループを抜ける
                 }

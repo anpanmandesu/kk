@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 5997914532603843768}
   - component: {fileID: 5997914532603843771}
   - component: {fileID: 5997914532603843747}
-  - component: {fileID: 5997914532603843745}
   - component: {fileID: 5997914532603843744}
   m_Layer: 6
   m_Name: Circle(Clone) 1 (24)
@@ -235,38 +234,6 @@ PolygonCollider2D:
       - {x: 0.40234375, y: 0.29296875}
       - {x: 0.29296875, y: 0.40234375}
       - {x: 0.15234375, y: 0.47265625}
---- !u!114 &5997914532603843745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5997914532603843765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2492579b5e7d547a59c498e3da8c81c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  stoppingDistance: 0
-  isTouched: 0
-  force: 1
-  wallTag: obstacle
-  repulsionForce: 10
-  raycastDistance: 1
-  siya: {fileID: 0}
-  target: {fileID: 0}
-  desiredSeparation: 1.5
-  wallAvoidanceDistance: 3
-  A: 1
-  B: 0.1
-  gamma: 1
-  kappa: 1
-  avoidanceRadius: 0.3
-  agentLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  wallAvoidanceForce: 5
 --- !u!195 &5997914532603843744
 NavMeshAgent:
   m_ObjectHideFlags: 0

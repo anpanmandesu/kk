@@ -6,8 +6,8 @@ public class tuiju : MonoBehaviour
 {
     public GameObject target;
     private GameObject lasttarget = null;//今助けに来ている誘導員
-    private float speedx = 3.0f;//追跡中の速度
-    private float acceleration = 0.02f;//減速加速度（追跡中の速度に沿って大きくなる）
+    private float speedx = 6f;//追跡中の速度
+    private float acceleration = 0.1f;//減速加速度（追跡中の速度に沿って大きくなる）
     private GameObject targetx;//
     private GameObject a;//直前に助けてた
     List<GameObject> b = new List<GameObject>();//以前に助けないでと送信したことがある誘導員
@@ -61,6 +61,10 @@ void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
         {
+            if (a != null)
+            {
+                a.gameObject.SendMessage("senior", SendMessageOptions.DontRequireReceiver);
+            }
             Destroy(this.gameObject);
             isTouched = false;
         }
@@ -115,7 +119,6 @@ void OnCollisionEnter2D(Collision2D other)
     }
     void tui(GameObject other)
     {
-        Debug.Log(other);
         if (lasttarget != null)
         {
             if (other != lasttarget)
@@ -136,7 +139,7 @@ void OnCollisionEnter2D(Collision2D other)
     {
         if (guide.Contains(las))
         {
-            targetx.gameObject.SendMessage("rescuepointcountloss", SendMessageOptions.DontRequireReceiver);
+            a.gameObject.SendMessage("rescuepointcountloss", SendMessageOptions.DontRequireReceiver);
         }
     }
     //一般エージェントが出口に到着したら目的地を一時的に出口にする

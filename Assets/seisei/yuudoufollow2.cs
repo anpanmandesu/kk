@@ -6,8 +6,8 @@ public class yuudoufollow2 : MonoBehaviour
 {
 
     [Header("Steering")]
-    private float speed = 0.5f;//現在の速度
-    private float fullspeed = 0.5f;//速度の最大値
+    private float speed = 6f;//現在の速度
+    private float fullspeed = 6f;//速度の最大値
     public float stoppingDistance = 0;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     public bool force = true;
@@ -57,12 +57,16 @@ public class yuudoufollow2 : MonoBehaviour
     private int rescount = 0;//前受け取り場所にいる高齢者の数
     private bool repo = false;//受け渡し場所に3人以上いたらtrue
     private GameObject child;//前受け渡し場所に来たら範囲内全体を判定するためにメッセージを送る子オブジェクト
+    public float areaxm;//エリアのxの上限
+    public float areaxs;//エリアのxの下限
+    public float areaym;//エリアのyの上限
+    public float areays;//エリアのyの下限
 
     void Start()
     {
-        NavMeshPath path = new NavMeshPath();
+        /*NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-        Pathcorners = path.corners;
+        Pathcorners = path.corners;*/
 
         //�ړ��J�n
         //MoveToWaypoint(waypoints[k]);
@@ -106,34 +110,14 @@ public class yuudoufollow2 : MonoBehaviour
 
 
 
-        ///<summary>�ȉ���]</summary>
-
-        Vector2 velocity = (Vector2)(transform.position - lastPos);
-        lastPos = transform.position;
-
-        //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
-        if (velocity != Vector2.zero)
-        {
-            //Debug.Log("C");
-            // ���x�x�N�g������p�x���v�Z�i�x���@�j
-            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-
-            // �I�u�W�F�N�g����]
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        }
+       
         //高齢者は一般エージェントによって位置が変わる可能性があるから毎フレーム更新
         if (kyuujosha != null)
         {
             AgentDestination = kyuujosha.transform.position;
         }
 
-        //三人以上救助してたら
-        if (nowrescue.Count == 3)
-        {
-            AgentDestination = receivepoint.transform.position;
-        }
-
-        if (randomwalk == true)
+        if (randomwalk == true && kyuujosha == null)
         {
             // 目的地に到達したら新しいランダムな目的地を設定
             float distanceToTarget = Vector3.Distance(transform.position, AgentDestination);
@@ -143,6 +127,11 @@ public class yuudoufollow2 : MonoBehaviour
                 SetRandommain();
 
             }
+        }
+        //三人以上救助してたら
+        if (nowrescue.Count == 3)
+        {
+            AgentDestination = receivepoint.transform.position;
         }
 
         //出口までと前の受け渡し場所がどちらが近いかと3人以上いたら0人じゃない場合
@@ -167,11 +156,28 @@ public class yuudoufollow2 : MonoBehaviour
                 }
             }
         }
+        ///<summary>�ȉ���]</summary>
+
+        Vector2 velocity = (Vector2)(transform.position - lastPos);
+        lastPos = transform.position;
+
+        //Debug.Log(velocity);//�t���[�����Ƃ�transform��ύX���ďu�Ԉړ����Ă��邾������������x�N�g����(0,0)
+        if (velocity != Vector2.zero)
+        {
+            //Debug.Log("C");
+            // ���x�x�N�g������p�x���v�Z�i�x���@�j
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            // �I�u�W�F�N�g����]
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
+
         Trace(transform.position, AgentDestination);
 
     }
     private void Trace(Vector2 current, Vector2 target)
     {
+        navMeshAgent.speed = speed;
         navMeshAgent.SetDestination(target);
         /*if (Vector2.Distance(current, target) <= stoppingDistance)
         {
@@ -296,10 +302,8 @@ public class yuudoufollow2 : MonoBehaviour
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
-        float randomX = Random.Range(-8.66f, 21f);
-        float randomY = Random.Range(receive.transform.position.y,19.5f);
-        /*Debug.Log(randomX);
-        Debug.Log(randomY);*/
+        float randomX = Random.Range(areaxs, areaxm);
+        float randomY = Random.Range(areays, areaym);
         AgentDestination = new Vector3(randomX, randomY, 0.0f);
     }
     //受け取り場所が近ければそちらに向かう(現在救助者が1人以上)
@@ -365,6 +369,8 @@ public class yuudoufollow2 : MonoBehaviour
         for (int i = 0; i < nowrescue.Count; i++)
         {
             nowrescue[i].gameObject.SendMessage("ReceiveCollision", receivepoint, SendMessageOptions.DontRequireReceiver);
+            nowrescue.RemoveAll(obj => obj == nowrescue[i]);
+            Debug.Log(nowrescue.Count);
         }
         //待機
         navMeshAgent.speed = 0f;
@@ -383,7 +389,6 @@ public class yuudoufollow2 : MonoBehaviour
     void nowtuiju(GameObject other)
     {
         rescue.Add(other);
-        Debug.Log(other);
     }
     //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）
     void guideclear(GameObject other)

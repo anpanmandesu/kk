@@ -51,7 +51,7 @@ public class hantei2 : MonoBehaviour
                 bool Ob = ObstacleBetween(transform.position, other.transform.position, other.gameObject);
                 if (Ob == false)
                 {
-                        transform.parent.GetComponent<yuudoufollow2>().hantei(other.gameObject);
+                    transform.parent.GetComponent<yuudoufollow2>().hantei(other.gameObject);
 
                         isTouched = false;
                 }
