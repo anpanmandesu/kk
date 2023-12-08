@@ -6,6 +6,8 @@ public class NavMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
     public float speed;
+    public float maxspeed = 6f;
+    public float minspeed = 8f;
     public float rescuespeed = 6f - 6f/6;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
@@ -66,6 +68,10 @@ public class NavMeshAgent2D : MonoBehaviour
     private GameObject goleobj;//出口
     //前までの目的地
     private Vector3 lasttarget;
+    public float areaxm = 35f;//エリアのxの上限
+    public float areaxs = -35f;//エリアのxの下限
+    public float areaym = 50f; //エリアのyの上限
+    public float areays = -50f;//エリアのyの下限
     void Start()
     {
         Debug.Log(rescuespeed);
@@ -350,8 +356,8 @@ public class NavMeshAgent2D : MonoBehaviour
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
-        float randomX = Random.Range(-95f, 95f);
-        float randomY = Random.Range(-35f, 35f);
+        float randomX = Random.Range(areaxm, areaxs);
+        float randomY = Random.Range(areaym, areays);
         /*Debug.Log(randomX);
         Debug.Log(randomY);*/
         /*Debug.Log(randomX);

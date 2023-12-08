@@ -185,10 +185,10 @@ MonoBehaviour:
   receivepoint: {fileID: 0}
   lastrescue: {fileID: 0}
   lastrecevepoint: {fileID: 0}
-  areaxm: 0
-  areaxs: 0
-  areaym: 0
-  areays: 0
+  areaxm: 34.5
+  areaxs: -34.5
+  areaym: 50
+  areays: 26
 --- !u!1 &8808435507058541458
 GameObject:
   m_ObjectHideFlags: 0

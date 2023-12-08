@@ -26,8 +26,8 @@ public class Generate : MonoBehaviour
 Vector3 GetRandomPosition()
 {
     // ランダムな位置を生成して返すメソッド
-    float randomX = Random.Range(-95f, 95f);
-    float randomY = Random.Range(-35f, 35f);
+    float randomX = Random.Range(-34.5f, 34.5f);
+    float randomY = Random.Range(-50f, 50f);
     return new Vector3(randomX, randomY, 0f);
     }
 

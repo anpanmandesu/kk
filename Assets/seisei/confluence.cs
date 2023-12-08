@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class confluence : MonoBehaviour
 {
-    public float viewRadius = 5f; //視野半径(現在インスペクターで変更できる)
-    public float viewAngle = 40f;// 視野の角度(左右にはそれぞれviewAngle/2)
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
+    public GameObject receivepoint;
     private LayerMask ignoreLayer;
 
     void Start()
@@ -28,7 +27,7 @@ public class confluence : MonoBehaviour
     {
 
 
-        if (other.gameObject.tag == "Confluence")
+        if (other.gameObject == receivepoint)
         {
 
                 transform.parent.GetComponent<yuudoufollow>().pointhantei();

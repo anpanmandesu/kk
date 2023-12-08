@@ -44,6 +44,7 @@ public class tuiju : MonoBehaviour
             {
                 b[i].gameObject.SendMessage("guideclear",this.gameObject, SendMessageOptions.DontRequireReceiver);
             }
+            b.Clear();
         }
         targetx = FindNearestObject();
         if (active == false)
@@ -137,7 +138,7 @@ void OnCollisionEnter2D(Collision2D other)
     //listに前誘導された誘導員がいた場合受け渡し場所にいる高齢者数をマイナス
     void reslist(GameObject las)
     {
-        if (guide.Contains(las))
+        if (guide.Exists(obj => obj.CompareTag(las.tag)))
         {
             a.gameObject.SendMessage("rescuepointcountloss", SendMessageOptions.DontRequireReceiver);
         }
