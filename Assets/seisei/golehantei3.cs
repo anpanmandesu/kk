@@ -1,16 +1,15 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hantei2 : MonoBehaviour
+public class golehantei3 : MonoBehaviour
 {
-    public float viewRadius = 100f; //視野半径(現在インスペクターで変更できる)
-    public float viewAngle =3600f;// 視野の角度(左右にはそれぞれviewAngle/2)
+    public float viewRadius = 100f;        // 視野の半径
+    public float viewAngle = 40f;        // 視野の角度(左右にはそれぞれviewAngle/2)
+    public GameObject kyuujo;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
     private LayerMask ignoreLayer;
-
-
     void Start()
     {
         ignoreLayer = 4 << gameObject.layer;
@@ -20,7 +19,6 @@ public class hantei2 : MonoBehaviour
     void Update()
     {
 
-        //DetectVisibleObjects(); //視野角をスクリプトで制御
     }
     /// <summary>
     ///�@����ipolygon)�ɓ����Ȃ��G�[�W�F���g(tag==Finish)���������Ƃ�
@@ -43,44 +41,23 @@ public class hantei2 : MonoBehaviour
         }
 
 
-        if (other.gameObject.tag == "Finish")
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Finish")
         {
+
             bool De = DetectCollidersInFieldOfView(other.gameObject);
             if (De == true)
             {
                 bool Ob = ObstacleBetween(transform.position, other.transform.position, other.gameObject);
                 if (Ob == false)
                 {
-                    transform.parent.GetComponent<yuudoufollow2>().hantei(other.gameObject);
-
-                        isTouched = false;
+                    transform.parent.GetComponent<tuiju2>().hantei(other.gameObject);
                 }
             }
         }
 
 
-
     }
-
-    //colliderの指定した角度の中にオブジェクトがある場合のみの判定（途中に障害物がない）
-    // void DetectVisibleObjects()
-    //     {
-    //         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, viewRadius);
-
-    //         foreach (Collider2D collider in colliders)
-    //         {
-    //             Vector2 dirToCollider = (collider.transform.position - transform.position).normalized;
-    //             float angleToCollider = Vector2.Angle(transform.up, dirToCollider);
-
-    //             // 視野角度内のColliderだけを検知
-    //             if (angleToCollider < viewAngle * 0.5f)
-    //             {
-    //                 ObstacleBetween(transform.position, collider.transform.position, viewRadius,collider.gameObject);
-
-    //             }
-    //         }
-    //     }
-
+    //範囲（viewAngle度)の中にあるオブジェクトだけ検知
     bool DetectCollidersInFieldOfView(GameObject otherObject)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, viewRadius);
@@ -90,6 +67,8 @@ public class hantei2 : MonoBehaviour
             Vector2 customDirection = Quaternion.Euler(0, 0, 270f) * transform.up;
             Vector2 dirToCollider = (collider.transform.position - transform.position).normalized;
             float angleToCollider = Vector2.Angle(customDirection, dirToCollider);
+
+            //Debug.Log(transform.up);
             // 視野角度内のColliderだけを検知
             if (angleToCollider < viewAngle * 0.5f && collider.name == otherObject.gameObject.name)
             {
@@ -108,11 +87,6 @@ public class hantei2 : MonoBehaviour
         float rayDistance = rayDirection.magnitude;
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, rayDirection, rayDistance);
         //int i = 1;
-        /*LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0,transform.position);
-        lineRenderer.SetPosition(1, otherObject.transform.position);*/
-
         // hitsをループして処理
         foreach (RaycastHit2D hit in hits)//rayにはOnTriggerStay2Dのオブジェクトは検知されない
         {
@@ -121,7 +95,7 @@ public class hantei2 : MonoBehaviour
             // 当たったColliderが検知したオブジェクトでない場合
             if (hit.collider != null)
             {
-                if (hit.collider.CompareTag("rescue") && !otherObject == transform.root.gameObject || hit.collider.CompareTag("GameController") || hit.collider.CompareTag("Agent") || hit.collider.CompareTag("obstacle"))
+                if (hit.collider.CompareTag("Agent") && !otherObject == transform.root.gameObject || hit.collider.CompareTag("rescue") || hit.collider.CompareTag("GameController") || hit.collider.CompareTag("obstacle"))
                 {
                     return true;
                 }
@@ -130,5 +104,4 @@ public class hantei2 : MonoBehaviour
         }
         return false;
     }
-
 }

@@ -6,8 +6,8 @@ public class yuudoufollow : MonoBehaviour
 {
     
     [Header("Steering")]
-    private float speed = 6f;//現在の速度
-    private float fullspeed = 6f;//速度の最大値
+    private float speed = 6f / 3.6f;//現在の速度
+    private float fullspeed = 6f / 3.6f;//速度の最大値
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     public bool force = true;
     int j = 0; //corner���ǂ邽�ё�����
@@ -30,6 +30,7 @@ public class yuudoufollow : MonoBehaviour
     public Transform[] waypoints;
     List<GameObject> rescue = new List<GameObject>();//���܂łɏ������G�[�W�F���g�̃��X�g
     List<GameObject> nowrescue = new List<GameObject>();//現在救助中の高齢者
+    public GameObject startgameObject;//初期化でランダム地点を見つけたときに送るオブジェクト（Generate.cs)
 
     private bool kyuujo = false;
 
@@ -62,6 +63,7 @@ public class yuudoufollow : MonoBehaviour
     public float areaxs;//エリアのxの下限
     public float areaym;//エリアのyの上限
     public float areays;//エリアのyの下限
+    private bool starting = false;
 
     void Start()
     {
@@ -80,15 +82,34 @@ public class yuudoufollow : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
         //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("set");
+        float minDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject obj in objectsWithTag)
+        {
+            float distance = Vector3.Distance(obj.transform.position, currentPosition);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                startgameObject = obj;
+            }
+        }
         SetRandommain();
         circleCollider = GetComponent<CircleCollider2D>();
         child = transform.Find("recevepointhantei").gameObject;
     }
 void Update()
     {
-       
-            // 回転をゼロに設定
-            transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
+        /*if (ObstacleHit == false && starting == false)
+        {
+            starting = true;
+            startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
+        }*/
+        //Debug.Log(rescount);
+
+        // 回転をゼロに設定
+        transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
             AgentForce = Vector2.zero;//リセット
         /* if (k >= 0)
      {
@@ -164,12 +185,12 @@ void Update()
                     // より近い方のターゲットを表示&&今引き連れている高齢者が0でなければ
                     if (pathLengthToTarget1 < pathLengthToTarget2 && nowrescue.Count != 0)
                     {
-                        Debug.Log("E");
+                        //Debug.Log("E");
                         AgentDestination = receivepoint.transform.position;
                     }
                     else
                     {
-                        Debug.Log("F");
+                        //Debug.Log("F");
                         AgentDestination = lastrecevepoint.transform.position;
                     }
                 }
@@ -240,7 +261,7 @@ void Update()
             randomwalk = true;
             //高齢者を運んでいるときは速度が変更される（一人につき時速-1km)
             speed -= fullspeed / 6;
-            Debug.Log(speed);
+            //Debug.Log(speed);
             navMeshAgent.speed = speed;
 
         }
@@ -248,9 +269,9 @@ void Update()
     //受け取り場所に誘導員がついたら、高齢者を中心に移動させるよう情報を受け渡す
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Confluence") 
+        
+        if (other.gameObject == receivepoint) 
         {
-            
             for (int i = 0; i < nowrescue.Count; i++)
             {
                 //次のエリアの誘導員に受け取り場所に高齢者を渡すたび呼びだす
@@ -258,7 +279,7 @@ void Update()
                 nowrescue[i].gameObject.SendMessage("ReceiveCollision", receivepoint, SendMessageOptions.DontRequireReceiver);
             }
             //待機
-            navMeshAgent.speed = 0f;
+            speed = 0f;
             //高齢者エージェントから受け取るまで待機
                 StartCoroutine(MyCoroutine());
                 circleCollider.isTrigger = true;
@@ -287,19 +308,19 @@ void Update()
             //���ꂢ�ɏ�������Array.Resize(ref �z��I�u�W�F�N�g, �V�����T�C�Y);
             if (kyuujosha == null)
             {
-                Debug.Log("B");
+                //Debug.Log("B");
                 // ���܂łɏ������G�[�W�F���g�̃��X�g�ɂ��Ȃ������������
                 if (!rescue.Contains(otherObject))
                 {
-                    Debug.Log("C");
+                    //Debug.Log("C");
                     otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
                     if (!rescue.Contains(otherObject))
                     {
-                        Debug.Log("D");
+                        //Debug.Log("D");
                         kyuujosha = otherObject;
                         //���̒n�_�Ɍ��������߂�99
                         kyuujo = true;
-                        Debug.Log("b");
+                        //Debug.Log("b");
                         rescue.Add(otherObject);// ���܂łɏ������G�[�W�F���g�̃��X�g�ɒǉ�
                         AgentDestination = kyuujosha.transform.position;
                     }
@@ -349,11 +370,12 @@ void Update()
                 }
             }
         }
+        
     }
     //ループ
     private System.Collections.IEnumerator MyCoroutine()
     {
-
+        
         // コルーチンの処理
         while (!xxx)
         {

@@ -8,40 +8,63 @@ public class fps : MonoBehaviour
     public string agentTag = "Agent";
     public string FinishTag = "Finish";
 
-    private float elapsedTime = 0f;
+    private float elapsedTime = 0.1f;
     [SerializeField]
     private int FPS = 60;
     public float time = 0f;
+    public float interval = 10;
+    private int i = 1;
+    private bool active = false;
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 0.1f; // 実行時間を1/10にする
         Application.targetFrameRate = FPS;
+        // 30秒ごとにCheckElapsedTimeメソッドを実行
     }
 
     // Update is called once per frame
     void Update()
     {
-        // 経過時間を更新
-        elapsedTime += Time.deltaTime;
-
-        // 経過時間が指定の時間を超えたら終了
-        if (elapsedTime >= totalTimeInSeconds)
+        if (active)
         {
-            // ゲーム終了の処理をここに記述
-            Debug.Log("5分経過しました。ゲームを終了します。");
-            // タグ名
+            // 経過時間を更新
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime >= interval && i != 10)
+            {
+                Debug.Log(i * 30 + "秒");
+                // タグが付いているゲームオブジェクトの配列を取得
+                GameObject[] agents = GameObject.FindGameObjectsWithTag(agentTag);
+                GameObject[] finishs = GameObject.FindGameObjectsWithTag(FinishTag);
+                // 配列の要素数（ゲームオブジェクトの数）を表示
+                Debug.Log($"Number of agents with tag '{agentTag}': {agents.Length}");
+                Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length}");
+                elapsedTime = 0;
+                i++;
+            }
 
-        // タグが付いているゲームオブジェクトの配列を取得
-        GameObject[] agents = GameObject.FindGameObjectsWithTag(agentTag);
-        GameObject[] finishs = GameObject.FindGameObjectsWithTag(FinishTag);
+            // 経過時間が指定の時間を超えたら終了
+            if (i == 10)
+            {
+                // ゲーム終了の処理をここに記述
+                Debug.Log("5分経過しました。ゲームを終了します。");
+                // タグ名
 
-        // 配列の要素数（ゲームオブジェクトの数）を表示
-        Debug.Log($"Number of agents with tag '{agentTag}': {agents.Length}");
-        Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length}");
-            // アプリケーションを終了
-            Time.timeScale = time;
+                // タグが付いているゲームオブジェクトの配列を取得
+                GameObject[] agents = GameObject.FindGameObjectsWithTag(agentTag);
+                GameObject[] finishs = GameObject.FindGameObjectsWithTag(FinishTag);
+
+                // 配列の要素数（ゲームオブジェクトの数）を表示
+                Debug.Log($"Number of agents with tag '{agentTag}': {agents.Length}");
+                Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length}");
+                // アプリケーションを終了
+                Time.timeScale = time;
+                i++;
+            }
         }
 
+    }
+    void Ac()
+    {
+        active = true;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class hantei : MonoBehaviour
 {
     public float viewRadius = 100f; //視野半径(現在インスペクターで変更できる)
-    public float viewAngle = 180f;// 視野の角度(左右にはそれぞれviewAngle/2)
+    public float viewAngle = 360f;// 視野の角度(左右にはそれぞれviewAngle/2)
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     // Start is called before the first frame update
     private LayerMask ignoreLayer;

@@ -10,6 +10,7 @@ TagManager:
   - siya
   - others
   - rescue
+  - set
   layers:
   - Default
   - TransparentFX

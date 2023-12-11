@@ -361,8 +361,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 085be8124647e6c49813135bfe8ada56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 10
-  viewAngle: 60
   isTouched: 0
   receivepoint: {fileID: 0}
   rescue: {fileID: 0}
@@ -379,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 5
-  viewAngle: 40
+  viewAngle: 360
   isTouched: 0
 --- !u!1 &8808435507289550313
 GameObject:
@@ -430,7 +428,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.58
+  m_Radius: 2.93
 --- !u!114 &8808435507289550311
 MonoBehaviour:
   m_ObjectHideFlags: 0

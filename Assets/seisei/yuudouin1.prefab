@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 10
-  viewAngle: 40
+  viewAngle: 360
   isTouched: 0
 --- !u!212 &5583008631085580006
 SpriteRenderer:
@@ -345,9 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09f2ab6345c5774db8db859d7ecebe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 5
-  viewAngle: 40
   isTouched: 0
+  receivepoint: {fileID: 0}
 --- !u!1 &5583008632748993851
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,10 +356,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5583008632748993850}
-  - component: {fileID: 5583008632748993853}
   - component: {fileID: 5583008632748993852}
   - component: {fileID: 5583008632748993855}
   - component: {fileID: 5583008632748993854}
+  - component: {fileID: 4493686475880929061}
   m_Layer: 0
   m_Name: recevepointhantei
   m_TagString: siya
@@ -383,18 +382,6 @@ Transform:
   m_Father: {fileID: 5583008630964870592}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5583008632748993853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5583008632748993851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c2bed373e622884f98e7f95db1437f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &5583008632748993852
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -484,3 +471,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4493686475880929061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5583008632748993851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9417284eb625f554ba3826b2f9adce7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  y: {fileID: 0}

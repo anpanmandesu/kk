@@ -8,29 +8,30 @@ public class recevepointhantei2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
-    {      
+    {
     }
     void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.tag == "Finish")
-        { 
+        {
             if (x)
             {
+                other.gameObject.SendMessage("tui", gameObject.transform.parent.gameObject, SendMessageOptions.DontRequireReceiver);
                 transform.parent.GetComponent<yuudoufollow2>().hantei(other.gameObject);
             }
         }
     }
     void receveEnter()
     {
-            x = true; 
+        x = true;
     }
     void receveExit()
     {
-            x = false;
+        x = false;
     }
 }

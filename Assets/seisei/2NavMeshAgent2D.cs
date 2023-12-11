@@ -1,14 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-public class NavMeshAgent2D : MonoBehaviour
+public class N2avMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
     public float speed;
-    public float maxspeed = 6f / 3.6f;
-    public float minspeed = 8f / 3.6f;
-    public float rescuespeed = (6f - 6f/6) / 3.6f;//高齢者を救助したときの移動速度
+    public float maxspeed = 6f;
+    public float minspeed = 8f;
+    public float rescuespeed = 6f - 6f / 6;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
@@ -49,7 +49,6 @@ public class NavMeshAgent2D : MonoBehaviour
 
     public float wallAvoidanceForce = 5.0f;
     private Vector2 AgentForce = new Vector2(0f, 0f);
-    public GameObject startgameObject;//初期化でランダム地点を見つけたときに送るオブジェクト（Generate.cs)
 
 
     Vector3 randomPoint = Vector3.zero;
@@ -73,29 +72,15 @@ public class NavMeshAgent2D : MonoBehaviour
     public float areaxs = -35f;//エリアのxの下限
     public float areaym = 50f; //エリアのyの上限
     public float areays = -50f;//エリアのyの下限
-    private bool starting = false;
     void Start()
     {
-        R  = (1 == Random.Range(1,11));
+        R = (1 == Random.Range(1, 11));
         speed = Random.Range(minspeed, maxspeed);
         //Debug.Log(speed);
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
 
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("set");
-        float minDistance = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-
-        foreach (GameObject obj in objectsWithTag)
-        {
-            float distance = Vector3.Distance(obj.transform.position, currentPosition);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                startgameObject = obj;
-            }
-        }
         SetRandommain();
 
         lastPos = transform.position;
@@ -120,11 +105,6 @@ public class NavMeshAgent2D : MonoBehaviour
     }
     void Update()
     {
-        if (ObstacleHit == false && starting == false)
-        {
-            starting = true;
-            startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
-        }
         // 回転をゼロに設定
         transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
 
@@ -217,7 +197,7 @@ public class NavMeshAgent2D : MonoBehaviour
             AgentDestination = sinior.transform.position;
         }
 
-        
+
 
         ///<summary>�ȉ���]</summary>
         Vector2 velocity = (Vector2)(transform.position - lastPos);
@@ -343,9 +323,9 @@ public class NavMeshAgent2D : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            if(sinior != null)
+            if (sinior != null)
             {
-                sinior.gameObject.SendMessage("gole",goleobj , SendMessageOptions.DontRequireReceiver);
+                sinior.gameObject.SendMessage("gole", goleobj, SendMessageOptions.DontRequireReceiver);
             }
             Destroy(this.gameObject);
             isTouched = false;
@@ -447,7 +427,8 @@ public class NavMeshAgent2D : MonoBehaviour
 
     public void hantei(GameObject otherObject)
     {
-        if (otherObject.tag == "Finish" && R){
+        if (otherObject.tag == "Finish" && R)
+        {
             if (sinior == null)
             {
                 otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
@@ -470,7 +451,7 @@ public class NavMeshAgent2D : MonoBehaviour
             }
 
         }
-        
+
     }
     //誘導員を見つけた際、近くの出口が目的地になる
     public void golehantei()
@@ -504,7 +485,8 @@ public class NavMeshAgent2D : MonoBehaviour
         return nearestObject;
     }
     //追跡エージェントがいたらリストに追加
-    void nowtuiju (GameObject other){
+    void nowtuiju(GameObject other)
+    {
         rescue.Add(other);
     }
     //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）

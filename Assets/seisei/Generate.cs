@@ -5,23 +5,38 @@ using UnityEngine;
 public class Generate : MonoBehaviour
 {
     public GameObject Agent;
+    public GameObject Agent2;
     public GameObject Finish;
+    public GameObject Finish2;
+    public GameObject startgameObject;
     public int Agentnumber = 10;
+    public int Agentnumber2 = 10;
     public int Finishnumber = 10;
+    public int Finishnumber2 = 10;
     public float castRadius = 0.3f;
     private bool obstacleHit = true;
+    private int x = 0; //初期化でランダムな位置を見つけるまで開始しない(fps.cs)
     // Start is called before the first frame update
+    public bool R = false;
     void Start()
     {
         seisei(Agent, Agentnumber);
+        seisei(Agent2, Agentnumber2);
         seisei(Finish, Finishnumber);
+        seisei(Finish2, Finishnumber2);
+        Time.timeScale = 0;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (R)
+        {
+            //Debug.Log(x);
+            Time.timeScale = 0.2f; // 実行時間を1/10にする
+            startgameObject.gameObject.SendMessage("Ac",  SendMessageOptions.DontRequireReceiver);
+        }
     }
 Vector3 GetRandomPosition()
 {
@@ -59,4 +74,8 @@ Vector3 GetRandomPosition()
             }
         }
     }
+    /*void xplus()
+    {
+        x++;
+    }*/
 }

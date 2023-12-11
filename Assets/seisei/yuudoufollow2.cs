@@ -6,8 +6,8 @@ public class yuudoufollow2 : MonoBehaviour
 {
 
     [Header("Steering")]
-    private float speed = 6f;//現在の速度
-    private float fullspeed = 6f;//速度の最大値
+    private float speed = 6f/3.6f;//現在の速度
+    private float fullspeed = 6f/3.6f;//速度の最大値
     public float stoppingDistance = 0;
     public bool isTouched = false;//�Ԃ��������ǂ����̔���
     public bool force = true;
@@ -61,6 +61,8 @@ public class yuudoufollow2 : MonoBehaviour
     public float areaxs;//エリアのxの下限
     public float areaym;//エリアのyの上限
     public float areays;//エリアのyの下限
+    public GameObject startgameObject;//初期化でランダム地点を見つけたときに送るオブジェクト（Generate.cs)
+    private bool starting = false;
 
     void Start()
     {
@@ -79,12 +81,31 @@ public class yuudoufollow2 : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
         //ランダムな地点に目的地（その地点のエージェント半径いないに障害物がない場合）
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("set");
+        float minDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject obj in objectsWithTag)
+        {
+            float distance = Vector3.Distance(obj.transform.position, currentPosition);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                startgameObject = obj;
+            }
+        }
+
         SetRandommain();
         circleCollider = GetComponent<CircleCollider2D>();
         child = transform.Find("recevepointhantei").gameObject;
     }
     void Update()
     {
+        /*if (ObstacleHit == false && starting == false)
+        {
+            starting = true;
+            startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
+        }*/
         // 回転をゼロに設定
         transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
         AgentForce = Vector2.zero;//リセット
@@ -235,8 +256,8 @@ public class yuudoufollow2 : MonoBehaviour
             kyuujosha = null;
             randomwalk = true;
             //高齢者を運んでいるときは速度が変更される（一人につき時速-1km)
-            speed -= fullspeed / 6;
-            Debug.Log(speed);
+            //speed -= fullspeed / 6;
+            //Debug.Log(speed);
             navMeshAgent.speed = speed;
 
         }
@@ -339,6 +360,11 @@ public class yuudoufollow2 : MonoBehaviour
                 }
             }
         }
+        if (starting == false)
+        {
+            starting = true;
+            startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
+        }
     }
     //ループ
     private System.Collections.IEnumerator MyCoroutine()
@@ -348,6 +374,7 @@ public class yuudoufollow2 : MonoBehaviour
         while (!xxx)
         {
             yield return null; // 1フレーム待機
+
         }
         circleCollider.isTrigger = false;
         speed = fullspeed;
@@ -373,7 +400,7 @@ public class yuudoufollow2 : MonoBehaviour
             Debug.Log(nowrescue.Count);
         }
         //待機
-        navMeshAgent.speed = 0f;
+        speed = 0f;
         //高齢者エージェントから受け取るまで待機
         StartCoroutine(MyCoroutine());
         circleCollider.isTrigger = true;
