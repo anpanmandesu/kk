@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 4700484504705541202}
   m_Layer: 6
   m_Name: Finish activ
-  m_TagString: Agent
+  m_TagString: Finish2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,8 +380,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  maxspeed: 6
-  minspeed: 8
   rescuespeed: 5
   stoppingDistance: 0
   isTouched: 0

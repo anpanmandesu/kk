@@ -15,7 +15,7 @@ public class Generate : MonoBehaviour
     public int Finishnumber2 = 10;
     public float castRadius = 0.3f;
     private bool obstacleHit = true;
-    private int x = 0; //‰Šú‰»‚Åƒ‰ƒ“ƒ_ƒ€‚ÈˆÊ’u‚ğŒ©‚Â‚¯‚é‚Ü‚ÅŠJn‚µ‚È‚¢(fps.cs)
+    private int x = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ÈˆÊ’uï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ÅŠJï¿½nï¿½ï¿½ï¿½È‚ï¿½(fps.cs)
     // Start is called before the first frame update
     public bool R = false;
     void Start()
@@ -34,13 +34,13 @@ public class Generate : MonoBehaviour
         if (R)
         {
             //Debug.Log(x);
-            Time.timeScale = 0.2f; // ÀsŠÔ‚ğ1/10‚É‚·‚é
+            Time.timeScale = 0.1f; // ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ô‚ï¿½1/10ï¿½É‚ï¿½ï¿½ï¿½
             startgameObject.gameObject.SendMessage("Ac",  SendMessageOptions.DontRequireReceiver);
         }
     }
 Vector3 GetRandomPosition()
 {
-    // ƒ‰ƒ“ƒ_ƒ€‚ÈˆÊ’u‚ğ¶¬‚µ‚Ä•Ô‚·ƒƒ\ƒbƒh
+    // ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ÈˆÊ’uï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ä•Ô‚ï¿½ï¿½ï¿½ï¿½\ï¿½bï¿½h
     float randomX = Random.Range(-34.5f, 34.5f);
     float randomY = Random.Range(-50f, 50f);
     return new Vector3(randomX, randomY, 0f);
@@ -55,20 +55,20 @@ Vector3 GetRandomPosition()
             {
                 GameObject newObject = Instantiate(obj, GetRandomPosition(), Quaternion.identity);
 
-                // ”¼Œa“à‚Ì‚·‚×‚Ä‚ÌCollider2D‚ğŒŸo
+                // ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½Ì‚ï¿½ï¿½×‚Ä‚ï¿½Collider2Dï¿½ï¿½ï¿½ï¿½ï¿½o
                 Collider2D[] colliders = Physics2D.OverlapCircleAll(newObject.transform.position, castRadius);
 
                 obstacleHit = false;
 
-                // ŠeCollider2D‚É‘Î‚µ‚Äˆ—
+                // ï¿½eCollider2Dï¿½É‘Î‚ï¿½ï¿½Äï¿½ï¿½ï¿½
                 foreach (Collider2D collider in colliders)
                 {
-                    // ƒ^ƒO‚ªw’è‚µ‚½áŠQ•¨‚Ìƒ^ƒO‚Æˆê’v‚·‚é‚©Šm”F
-                    if (collider.CompareTag("obstacle"))
+                    // ï¿½^ï¿½Oï¿½ï¿½ï¿½wï¿½è‚µï¿½ï¿½ï¿½ï¿½Qï¿½ï¿½ï¿½Ìƒ^ï¿½Oï¿½Æˆï¿½vï¿½ï¿½ï¿½é‚©ï¿½mï¿½F
+                    if (collider.CompareTag("obstacle")&&collider.CompareTag("Confluence"))
                     {
                         obstacleHit = true;
-                        Destroy(newObject);  // áŠQ•¨‚ª‚ ‚ê‚Î¶¬‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ”jŠü
-                        break;  // áŠQ•¨‚ªˆê‚Â‚Å‚àŒŸo‚³‚ê‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
+                        Destroy(newObject);  // ï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½jï¿½ï¿½
+                        break;  // ï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚Å‚ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ê‚½ï¿½çƒ‹ï¿½[ï¿½vï¿½ğ”²‚ï¿½ï¿½ï¿½
                     }
                 }
             }

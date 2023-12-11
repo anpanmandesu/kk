@@ -6,7 +6,7 @@ public class tuiju : MonoBehaviour
 {
     public GameObject target;
     private GameObject lasttarget = null;//今助けに来ている誘導員
-    private float speedx = 1f;//追跡中の速度
+    private float speedx = 3f;//追跡中の速度
     private float acceleration = 0.05f;//減速加速度（追跡中の速度に沿って大きくなる）
     private GameObject targetx;//
     private GameObject a;//直前に助けてた
@@ -26,7 +26,6 @@ public class tuiju : MonoBehaviour
     }
     void Update()
     {
-        
         
         //受け取り場所の近くに来たら中心に動くようにする
         if (Con)

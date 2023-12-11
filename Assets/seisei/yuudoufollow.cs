@@ -282,7 +282,7 @@ void Update()
             speed = 0f;
             //高齢者エージェントから受け取るまで待機
                 StartCoroutine(MyCoroutine());
-                circleCollider.isTrigger = true;
+                circleCollider.isTrigger = false;
             //速度を戻す
             
         }
@@ -375,13 +375,13 @@ void Update()
     //ループ
     private System.Collections.IEnumerator MyCoroutine()
     {
-        
+        circleCollider.isTrigger = true;
         // コルーチンの処理
         while (!xxx)
         {
             yield return null; // 1フレーム待機
         }
-        circleCollider.isTrigger = false;
+        
         speed = fullspeed;
         navMeshAgent.speed = speed;
         nowrescue.Clear();

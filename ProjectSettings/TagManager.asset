@@ -11,6 +11,8 @@ TagManager:
   - others
   - rescue
   - set
+  - set
+  - Finish2
   layers:
   - Default
   - TransparentFX

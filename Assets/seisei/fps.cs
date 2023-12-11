@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class fps : MonoBehaviour
 {
-    public float totalTimeInSeconds = 30f; // 5•ª = 300•b
+    public float totalTimeInSeconds = 30f; // 5ï¿½ï¿½ = 300ï¿½b
     public string agentTag = "Agent";
     public string FinishTag = "Finish";
+    public string FinishTag2 = "Finish2";
 
     private float elapsedTime = 0.1f;
     [SerializeField]
@@ -19,7 +20,7 @@ public class fps : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = FPS;
-        // 30•b‚²‚Æ‚ÉCheckElapsedTimeƒƒ\ƒbƒh‚ğÀs
+        // 30ï¿½bï¿½ï¿½ï¿½Æ‚ï¿½CheckElapsedTimeï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½ï¿½ï¿½ï¿½ï¿½s
     }
 
     // Update is called once per frame
@@ -27,36 +28,37 @@ public class fps : MonoBehaviour
     {
         if (active)
         {
-            // Œo‰ßŠÔ‚ğXV
+            // ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½Xï¿½V
             elapsedTime += Time.deltaTime;
             if (elapsedTime >= interval && i != 10)
             {
-                Debug.Log(i * 30 + "•b");
-                // ƒ^ƒO‚ª•t‚¢‚Ä‚¢‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì”z—ñ‚ğæ“¾
+                Debug.Log(i * 30 + "ï¿½b");
+                // ï¿½^ï¿½Oï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì”zï¿½ï¿½ï¿½ï¿½æ“¾
                 GameObject[] agents = GameObject.FindGameObjectsWithTag(agentTag);
                 GameObject[] finishs = GameObject.FindGameObjectsWithTag(FinishTag);
-                // ”z—ñ‚Ì—v‘f”iƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì”j‚ğ•\¦
+                GameObject[] finishs2 = GameObject.FindGameObjectsWithTag(FinishTag2);
+                // ï¿½zï¿½ï¿½Ì—vï¿½fï¿½ï¿½ï¿½iï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½jï¿½ï¿½\ï¿½ï¿½
                 Debug.Log($"Number of agents with tag '{agentTag}': {agents.Length}");
-                Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length}");
+                Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length + finishs2.Length}");
                 elapsedTime = 0;
                 i++;
             }
 
-            // Œo‰ßŠÔ‚ªw’è‚ÌŠÔ‚ğ’´‚¦‚½‚çI—¹
+            // ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½wï¿½ï¿½Ìï¿½ï¿½Ô‚ğ’´‚ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
             if (i == 10)
             {
-                // ƒQ[ƒ€I—¹‚Ìˆ—‚ğ‚±‚±‚É‹Lq
-                Debug.Log("5•ªŒo‰ß‚µ‚Ü‚µ‚½BƒQ[ƒ€‚ğI—¹‚µ‚Ü‚·B");
-                // ƒ^ƒO–¼
+                // ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‹Lï¿½q
+                Debug.Log("5ï¿½ï¿½ï¿½oï¿½ß‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B");
+                // ï¿½^ï¿½Oï¿½ï¿½
 
-                // ƒ^ƒO‚ª•t‚¢‚Ä‚¢‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì”z—ñ‚ğæ“¾
+                // ï¿½^ï¿½Oï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì”zï¿½ï¿½ï¿½ï¿½æ“¾
                 GameObject[] agents = GameObject.FindGameObjectsWithTag(agentTag);
                 GameObject[] finishs = GameObject.FindGameObjectsWithTag(FinishTag);
 
-                // ”z—ñ‚Ì—v‘f”iƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì”j‚ğ•\¦
+                // ï¿½zï¿½ï¿½Ì—vï¿½fï¿½ï¿½ï¿½iï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½jï¿½ï¿½\ï¿½ï¿½
                 Debug.Log($"Number of agents with tag '{agentTag}': {agents.Length}");
                 Debug.Log($"Number of agents with tag '{FinishTag}': {finishs.Length}");
-                // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğI—¹
+                // ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
                 Time.timeScale = time;
                 i++;
             }
