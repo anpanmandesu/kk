@@ -130,12 +130,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  startgameObject: {fileID: 0}
   receivepoint: {fileID: 0}
   nextrescue: {fileID: 0}
   lastrescue: {fileID: 0}
   lastrecevepoint: {fileID: 0}
-  areaxm: 0
-  areaxs: 0
+  areaxm: 19.5
+  areaxs: -19.5
   areaym: 0
   areays: 0
 --- !u!50 &5583008630964870597

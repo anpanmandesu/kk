@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class golehantei3 : MonoBehaviour
+public class golehanteia2 : MonoBehaviour
 {
     public float viewRadius = 100f;        // 視野の半径
     public float viewAngle = 40f;        // 視野の角度(左右にはそれぞれviewAngle/2)
@@ -41,7 +41,7 @@ public class golehantei3 : MonoBehaviour
         }
 
 
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Finish")
         {
 
             bool De = DetectCollidersInFieldOfView(other.gameObject);
@@ -50,7 +50,7 @@ public class golehantei3 : MonoBehaviour
                 bool Ob = ObstacleBetween(transform.position, other.transform.position, other.gameObject);
                 if (Ob == false)
                 {
-                    transform.parent.GetComponent<tuiju2>().hantei(other.gameObject);
+                    transform.parent.GetComponent<NavMe2>().hantei(other.gameObject);
                 }
             }
         }

@@ -237,11 +237,6 @@ void Update()
     ///<summary>�Ԃ������������</summary>
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Player")
-        {
-            Destroy(this.gameObject);
-            isTouched = false;
-        }
         // 衝突したオブジェクトにのみメッセージを送信
         if (other.gameObject.tag == "Finish")
         {
@@ -271,10 +266,10 @@ void Update()
         }
     }
     //受け取り場所に誘導員がついたら、高齢者を中心に移動させるよう情報を受け渡す
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         
-        if (other.gameObject == receivepoint) 
+        if (other.gameObject == receivepoint && nowrescue.Count > 0) 
         {
             for (int i = 0; i < nowrescue.Count; i++)
             {
@@ -317,11 +312,13 @@ void Update()
                 if (!rescue.Contains(otherObject))
                 {
                     //Debug.Log("C");
+                    Debug.Log(kyuujosha+"aa");
                     otherObject.gameObject.SendMessage("tui", this.gameObject, SendMessageOptions.DontRequireReceiver);
                     if (!rescue.Contains(otherObject))
                     {
                         //Debug.Log("D");
                         kyuujosha = otherObject;
+                        Debug.Log(kyuujosha);
                         //���̒n�_�Ɍ��������߂�99
                         kyuujo = true;
                         //Debug.Log("b");
@@ -402,7 +399,6 @@ void Update()
     void nowtuiju(GameObject other)
     {
         rescue.Add(other);
-        Debug.Log(other);
     }
     //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）
     void guideclear(GameObject other)

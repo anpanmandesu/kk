@@ -338,8 +338,8 @@ public class zentai : MonoBehaviour
     void SetRandomDestination()
     {
         // 2Dランダムな座標を取得(AgentのtransformおかしいからcolliderのInfoにある位置で見ること)
-        float randomX = Random.Range(-8.66f, 21f);
-        float randomY = Random.Range(-15f, 19.5f);
+        float randomX = Random.Range(-19.5f, 19.5f);
+        float randomY = Random.Range(39.5f, -39.5f);
         /*Debug.Log(randomX);
         Debug.Log(randomY);*/
         AgentDestination = new Vector3(randomX, randomY, 0.0f);

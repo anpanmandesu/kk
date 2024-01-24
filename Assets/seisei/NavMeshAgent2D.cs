@@ -6,9 +6,9 @@ public class NavMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
     public float speed;
-    public float maxspeed = 6f / 3.6f;
-    public float minspeed = 8f / 3.6f;
-    public float rescuespeed = (6f - 6f/6) / 3.6f;//高齢者を救助したときの移動速度
+    private float maxspeed = 6f / 3.6f;
+    private float minspeed = 8f / 3.6f;
+    private float rescuespeed = (6f - 6f/6) / 3.6f;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
@@ -120,11 +120,12 @@ public class NavMeshAgent2D : MonoBehaviour
     }
     void Update()
     {
-        if (ObstacleHit == false && starting == false)
+        /*if (ObstacleHit == false && starting == false)
         {
             starting = true;
             startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
-        }
+
+        }*/
         // 回転をゼロに設定
         transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
 
@@ -149,9 +150,6 @@ public class NavMeshAgent2D : MonoBehaviour
                 }
             }
         }*/
-
-        // 一定の範囲内にいるエージェントを取得
-        Collider2D[] nearbyAgents = Physics2D.OverlapCircleAll(transform.position, avoidanceRadius, agentLayer);
         /*
                 foreach (var agentCollider in nearbyAgents)
                 {
@@ -186,20 +184,7 @@ public class NavMeshAgent2D : MonoBehaviour
                     Vector2 acceleration = AgentForce / rb.mass;
                     rb.velocity += acceleration * Time.deltaTime;*//*
                 }*/
-        ///<summary>以下回転</summary>
-
-
-
-        //Debug.Log(velocity);//フレームごとにtransformを変更して瞬間移動しているだけだから方向ベクトルは(0,0)
-        //     if (velocity != Vector2.zero)
-        // {
-        //     Debug.Log("C");
-        //     // 速度ベクトルから角度を計算（度数法）
-        //     float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-
-        //     // オブジェクトを回転
-        //     /*transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));*/
-        // }
+        
 
         if (randomwalk == true && s == false)
         {
@@ -217,9 +202,8 @@ public class NavMeshAgent2D : MonoBehaviour
             AgentDestination = sinior.transform.position;
         }
 
-        
 
-        ///<summary>�ȉ���]</summary>
+        ///<summary>以下回転</summary>
         Vector2 velocity = (Vector2)(transform.position - lastPos);
         lastPos = transform.position;
 
@@ -308,32 +292,33 @@ public class NavMeshAgent2D : MonoBehaviour
 
 
         /*if (Vector2.Distance(current, target) <= stoppingDistance)
-        {
-            return;
-        }
+            {
+                return;
+            }
 
-        // NavMesh に応じて経路を求める
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
-
-
-        Vector2 corner = path.corners[0];
-
-        if (Vector2.Distance(current, corner) <= 0.2f)
-        {
-            corner = path.corners[1];
-        }
-        for (int i = 0; i < path.corners.Length; i++)
-        {
+            // NavMesh に応じて経路を求める
+            NavMeshPath path = new NavMeshPath();
+            NavMesh.CalculatePath(current, target, NavMesh.AllAreas, path);
 
 
-            //Debug.Log(path.corners[i]);
+            Vector2 corner = path.corners[0];
 
-            if (i == path.corners.Length - 1) continue;
-            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+            if (Vector2.Distance(current, corner) <= 0.2f)
+            {
+                corner = path.corners[1];
+            }
+            for (int i = 0; i < path.corners.Length; i++)
+            {
 
-        }
-        transform.position = Vector2.MoveTowards(current, corner+AgentForce, speed * Time.deltaTime);*/
+
+                //Debug.Log(path.corners[i]);
+
+                if (i == path.corners.Length - 1) continue;
+                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 100);
+
+            }
+            transform.position = Vector2.MoveTowards(current, corner+AgentForce, speed * Time.deltaTime);
+        */
     }
 
 

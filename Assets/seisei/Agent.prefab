@@ -287,7 +287,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7933688931101437487}
-  m_BodyType: 1
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -358,6 +358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
+  maxspeed: 6
+  minspeed: 8
   rescuespeed: 0.41666666
   stoppingDistance: 0
   isTouched: 0
@@ -378,7 +380,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   wallAvoidanceForce: 5
+  startgameObject: {fileID: 0}
   R: 0
+  areaxm: 19.5
+  areaxs: -19.5
+  areaym: 40
+  areays: -40
 --- !u!195 &7933688931101437498
 NavMeshAgent:
   m_ObjectHideFlags: 0

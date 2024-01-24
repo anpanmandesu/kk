@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3380582002654082275}
   - component: {fileID: 3380582002654082272}
   - component: {fileID: 1596072967296173252}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Finish
   m_TagString: Finish
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.004494493, g: 0.08413717, b: 0.9528302, a: 1}
   m_FlipX: 0
@@ -122,7 +122,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!114 &1596072967296173252
 MonoBehaviour:
@@ -137,6 +137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3380582002654082286}
+  lasttarget: {fileID: 0}
   isTouched: 0
   active: 0
-  r: {fileID: 3617819280619273103, guid: 001a4157bc5af4e4fbef395825cf9505, type: 3}

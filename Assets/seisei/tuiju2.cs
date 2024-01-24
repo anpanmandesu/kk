@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class tuiju2 : MonoBehaviour
 {
     [Header("Steering")]
-    public float speed = 4f / 3.6f;
-    public float rescuespeed = 6f - 6f / 6;//高齢者を救助したときの移動速度
+    private float speed = 4f/3.6f;
+    private float rescuespeed = (4f - 4f / 6) / 3.6f;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;
@@ -47,6 +47,7 @@ public class tuiju2 : MonoBehaviour
 
     public float wallAvoidanceForce = 5.0f;
     private Vector2 AgentForce = new Vector2(0f, 0f);
+    public GameObject startgameObject;//初期化でランダム地点を見つけたときに送るオブジェクト（Generate.cs)
 
 
     Vector3 randomPoint = Vector3.zero;
@@ -71,7 +72,6 @@ public class tuiju2 : MonoBehaviour
     public float areaym = 50f; //エリアのyの上限
     public float areays = -50f;//エリアのyの下限
     private bool starting = false;
-    public GameObject startgameObject;//初期化でランダム地点を見つけたときに送るオブジェクト（Generate.cs)
     void Start()
     {
         //Debug.Log(speed);
@@ -116,11 +116,11 @@ public class tuiju2 : MonoBehaviour
     }
     void Update()
     {
-       /* if (ObstacleHit == false && starting == false)
+        if (ObstacleHit == false && starting == false)
         {
             starting = true;
             startgameObject.SendMessage("xplus", SendMessageOptions.DontRequireReceiver);
-        }*/
+        }
         // 回転をゼロに設定
         transform.rotation = Quaternion.identity;//これがないとnavmeshAgentで回転してしまう
 
@@ -346,15 +346,6 @@ public class tuiju2 : MonoBehaviour
             Destroy(this.gameObject);
             isTouched = false;
         }
-        // 衝突したオブジェクトにのみメッセージを送信
-        if (other.gameObject.tag == "Finish")
-        {
-            if (sinior == other.gameObject)
-            {
-                other.gameObject.SendMessage("OnCollisionOccurred", this.gameObject, SendMessageOptions.DontRequireReceiver);
-                navMeshAgent.speed = rescuespeed;
-            }
-        }
     }
     void OnCollisionStay2D(Collision2D other)
     {
@@ -416,6 +407,7 @@ public class tuiju2 : MonoBehaviour
         return firstTerm * normalizedDirection + secondTerm;
         
     }*/
+
     //ランダムな目的地設定main(障害物がそこにないか)
     void SetRandommain()
     {
@@ -486,15 +478,5 @@ public class tuiju2 : MonoBehaviour
         }
 
         return nearestObject;
-    }
-    //追跡エージェントがいたらリストに追加
-    void nowtuiju(GameObject other)
-    {
-        rescue.Add(other);
-    }
-    //今まで助けたリストから受け渡し場所に高齢者がついたら消去（実際に誘導していない場合）
-    void guideclear(GameObject other)
-    {
-        rescue.RemoveAll(obj => obj == other);
     }
 }

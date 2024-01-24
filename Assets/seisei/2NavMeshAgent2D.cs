@@ -6,9 +6,9 @@ public class N2avMeshAgent2D : MonoBehaviour
 {
     [Header("Steering")]
     public float speed;
-    public float maxspeed = 6f;
-    public float minspeed = 8f;
-    public float rescuespeed = 6f - 6f / 6;//高齢者を救助したときの移動速度
+    private float maxspeed = 6f/ 3.6f;
+    private float minspeed = 8f/3.6f;
+    private float rescuespeed = (6f - 6f / 6)/3.6f;//高齢者を救助したときの移動速度
     public float stoppingDistance = 0;
     public bool isTouched = false;//ぶつかったかどうかの判定
     float kakudo = -90f;

@@ -401,8 +401,8 @@ MonoBehaviour:
     m_Bits: 0
   wallAvoidanceForce: 5
   R: 0
-  areaxm: 35
-  areaxs: -35
-  areaym: 50
-  areays: -50
+  areaxm: 19.5
+  areaxs: -19.5
+  areaym: 40
+  areays: -40
   startgameObject: {fileID: 0}
